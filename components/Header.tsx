@@ -1,10 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -12,32 +22,43 @@ export default function Header() {
     { name: 'Formações', href: '/formacoes' },
     { name: 'Comunidade', href: '/comunidade' },
     { name: 'Blog', href: '/blog' },
-    { name: 'Contato', href: '/contato' },
   ]
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+      scrolled ? 'glass shadow-lg backdrop-blur-lg' : 'bg-transparent'
+    }`}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-primary-600">
-              DevClub
+            <Link href="/" className="group relative">
+              <span className="text-3xl font-black gradient-text tracking-tight">
+                DevClub
+              </span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
+            {navigation.map((item, index) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+                className="relative text-text-dark hover:text-primary transition-colors duration-200 font-medium group"
+                style={{
+                  animation: `slideDown 0.5s ease-out ${index * 0.1}s both`
+                }}
               >
-                {item.name}
+                <span className="relative z-10">{item.name}</span>
+                <span className="absolute inset-x-0 -bottom-2 h-0.5 bg-primary scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
               </Link>
             ))}
             <Link
               href="/#matricule-se"
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors duration-200 font-medium"
+              className="btn-glow shine"
+              style={{
+                animation: 'slideDown 0.5s ease-out 0.6s both'
+              }}
             >
               Matricule-se
             </Link>
@@ -46,16 +67,19 @@ export default function Header() {
           <div className="md:hidden">
             <button
               type="button"
-              className="text-gray-700 hover:text-gray-900 p-2"
+              className="text-text-dark hover:text-primary p-2 transition-colors duration-200"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Menu"
             >
               <svg
-                className="h-6 w-6"
+                className="h-6 w-6 transition-transform duration-200"
                 fill="none"
                 viewBox="0 0 24 24"
-                strokeWidth="1.5"
+                strokeWidth="2"
                 stroke="currentColor"
+                style={{
+                  transform: isMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)'
+                }}
               >
                 {isMenuOpen ? (
                   <path
@@ -75,29 +99,33 @@ export default function Header() {
           </div>
         </div>
 
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+        {/* Mobile menu */}
+        <div className={`md:hidden transition-all duration-300 overflow-hidden ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <div className="glass rounded-lg mt-2 p-4 space-y-1">
+            {navigation.map((item, index) => (
               <Link
-                href="/#matricule-se"
-                className="block w-full bg-primary-600 text-white px-3 py-2 rounded-md text-center font-medium hover:bg-primary-700"
+                key={item.name}
+                href={item.href}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-text-dark hover:text-primary hover:bg-white/10 transition-all duration-200"
                 onClick={() => setIsMenuOpen(false)}
+                style={{
+                  animation: isMenuOpen ? `slideUp 0.3s ease-out ${index * 0.05}s both` : 'none'
+                }}
               >
-                Matricule-se
+                {item.name}
               </Link>
-            </div>
+            ))}
+            <Link
+              href="/#matricule-se"
+              className="block w-full mt-4 btn-glow text-center"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Matricule-se
+            </Link>
           </div>
-        )}
+        </div>
       </nav>
     </header>
   )

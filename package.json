@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export",
+    "deploy": "npm run build && aws s3 sync ./out s3://devclub-institucional-bucket --delete"
+
   },
   "dependencies": {
     "next": "14.2.3",
