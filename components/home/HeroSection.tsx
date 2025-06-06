@@ -10,7 +10,7 @@ export default function HeroSection() {
   const [loopNum, setLoopNum] = useState(0)
   const [typingSpeed, setTypingSpeed] = useState(150)
 
-  const toRotate = ['Front-end', 'Back-end', 'Full Stack', 'Mobile']
+  const toRotate = ['Front-end', 'Back-end', 'Full Stack', 'Mobile', 'IA']
 
   useEffect(() => {
     let ticker = setInterval(() => {
@@ -44,7 +44,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden matrix-bg">
+    <section className="pb-24	relative min-h-screen flex items-center pt-20 overflow-hidden matrix-bg">
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="blob blob-1 top-0 -left-4"></div>
@@ -60,7 +60,7 @@ export default function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
               </span>
-              <span className="text-sm text-primary font-medium">Vagas abertas para a próxima turma</span>
+              <span className="text-sm text-primary font-medium">Esteja na Próxima Turma</span>
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight animate-slide-up">

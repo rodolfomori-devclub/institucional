@@ -9,14 +9,24 @@
     "lint": "next lint",
     "export": "next export",
     "deploy": "npm run build && aws s3 sync ./out s3://devclub-institucional-bucket --delete"
-
   },
   "dependencies": {
+    "@portabletext/react": "^3.2.1",
+    "@sanity/client": "^7.4.1",
+    "@sanity/image-url": "^1.1.0",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "date-fns": "^4.1.0",
+    "firebase": "^11.9.0",
+    "gray-matter": "^4.0.3",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^15.6.1",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@sanity/cli": "^3.91.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

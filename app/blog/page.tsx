@@ -1,9 +1,13 @@
 import { generateSEO } from '@/components/SEO'
 import Link from 'next/link'
+import Image from 'next/image'
+import { sanityClient, postQuery, urlFor, type Post } from '@/lib/sanity'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export const metadata = generateSEO({
   title: 'Blog - DevClub',
-  description: 'Artigos, tutoriais e novidades sobre programação, desenvolvimento web e tecnologia. Em breve!',
+  description: 'Artigos, tutoriais e novidades sobre programação, desenvolvimento web e tecnologia.',
   url: 'https://devclub.com.br/blog',
   keywords: [
     'blog programação',
@@ -13,53 +17,96 @@ export const metadata = generateSEO({
   ],
 })
 
-export default function BlogPage() {
-  return (
-    <section className="min-h-[70vh] flex items-center justify-center py-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="mb-8">
-            <svg
-              className="mx-auto h-24 w-24 text-primary-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Blog em construção
-          </h1>
-          <p className="text-lg text-gray-600 mb-8">
-            Estamos preparando conteúdos incríveis sobre programação, desenvolvimento web 
-            e tecnologia. Em breve, você encontrará aqui artigos, tutoriais e as últimas 
-            novidades do mundo tech.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+export const revalidate = 60
+
+async function getPosts(): Promise<Post[]> {
+  try {
+    const posts = await sanityClient.fetch(postQuery)
+    return posts || []
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    return []
+  }
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts()
+
+  if (posts.length === 0) {
+    return (
+      <section className="min-h-[70vh] flex items-center justify-center py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center">
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+              Blog DevClub
+            </h1>
+            <p className="text-lg text-gray-600 mb-8">
+              Em breve, novos artigos sobre programação e tecnologia.
+            </p>
             <Link
               href="/"
               className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors duration-200"
             >
               Voltar ao início
             </Link>
-            <a
-              href="https://youtube.com/devclub"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-primary-600 bg-white border-2 border-primary-600 rounded-lg hover:bg-primary-50 transition-colors duration-200"
-            >
-              Ver conteúdos no YouTube
-            </a>
           </div>
-          <p className="mt-8 text-sm text-gray-500">
-            Enquanto isso, acompanhe nossos conteúdos nas redes sociais!
-          </p>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="min-h-screen py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+              Blog DevClub
+            </h1>
+            <p className="text-xl text-gray-600">
+              Artigos, tutoriais e novidades sobre programação e tecnologia
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post) => (
+              <article
+                key={post._id}
+                className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100"
+              >
+                <Link href={`/blog/${post.slug.current}`} className="block">
+                  {post.mainImage && (
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={urlFor(post.mainImage).width(400).height(200).url()}
+                        alt={post.mainImage.alt || post.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <time className="text-sm text-gray-500">
+                      {format(new Date(post.publishedAt), "d 'de' MMMM 'de' yyyy", {
+                        locale: ptBR,
+                      })}
+                    </time>
+                    <h2 className="text-xl font-bold text-gray-900 mt-2 mb-3 line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-gray-600 line-clamp-3">
+                      {post.description}
+                    </p>
+                    {post.author && (
+                      <p className="text-sm text-gray-500 mt-4">
+                        Por {post.author}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
