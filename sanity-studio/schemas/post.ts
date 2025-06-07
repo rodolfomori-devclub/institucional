@@ -42,6 +42,29 @@ export default {
       ]
     },
     {
+      name: 'thumbnail',
+      title: 'Thumbnail Manual',
+      type: 'image',
+      description: 'Imagem opcional para substituir a gerada automaticamente pela IA',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Texto Alternativo',
+        }
+      ]
+    },
+    {
+      name: 'featured',
+      title: 'Post em Destaque',
+      type: 'boolean',
+      description: 'Marque para exibir como post em destaque',
+      initialValue: false
+    },
+    {
       name: 'body',
       title: 'Conteúdo',
       type: 'array',

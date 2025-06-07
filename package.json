@@ -11,11 +11,13 @@
     "deploy": "npm run build && aws s3 sync ./out s3://devclub-institucional-bucket --delete"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@portabletext/react": "^3.2.1",
     "@sanity/client": "^7.4.1",
     "@sanity/image-url": "^1.1.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
     "firebase": "^11.9.0",
     "gray-matter": "^4.0.3",
     "next": "14.2.3",

@@ -53,11 +53,20 @@ export default function Header() {
                 <span className="absolute inset-x-0 -bottom-2 h-0.5 bg-primary scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
               </Link>
             ))}
+            <a
+              href="https://aulas.devclub.com.br"
+              className="text-text-dark hover:text-primary transition-colors duration-200 font-medium"
+              style={{
+                animation: 'slideDown 0.5s ease-out 0.6s both'
+              }}
+            >
+              Login
+            </a>
             <Link
               href="/#matricule-se"
               className="btn-glow shine"
               style={{
-                animation: 'slideDown 0.5s ease-out 0.6s both'
+                animation: 'slideDown 0.5s ease-out 0.7s both'
               }}
             >
               Matricule-se
@@ -117,6 +126,16 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            <a
+              href="https://aulas.devclub.com.br"
+              className="block rounded-lg px-3 py-2 text-base font-medium text-text-dark hover:text-primary hover:bg-white/10 transition-all duration-200"
+              onClick={() => setIsMenuOpen(false)}
+              style={{
+                animation: isMenuOpen ? `slideUp 0.3s ease-out ${5 * 0.05}s both` : 'none'
+              }}
+            >
+              Login
+            </a>
             <Link
               href="/#matricule-se"
               className="block w-full mt-4 btn-glow text-center"

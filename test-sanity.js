@@ -1,12 +1,13 @@
 // Script para testar a conexão com o Sanity
+require('dotenv').config({ path: '.env.local' })
 const { createClient } = require('@sanity/client')
 
 const client = createClient({
-  projectId: 'twwvsuby',
-  dataset: 'production',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   apiVersion: '2024-01-01',
   useCdn: false,
-  token: 'skJsU1LNX3kVaipZMjUCbByoVeK1fEiJvFbXRBpI0xti5061slFH5F1jvFvW9Y1qNmeLFtwxFVebuGl665n5yfxgnycvUtih9lQe3hMjYz4I49UScw9ZtxQoQrh48Bn52m3cbFqkFPAm8GLAMR2P9rzDpgxtuHybHgMzaLSugOwkQfL5IGoi'
+  token: process.env.SANITY_API_TOKEN
 })
 
 async function testSanity() {

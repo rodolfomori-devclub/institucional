@@ -11,7 +11,10 @@
       "Bash(npx sanity init:*)",
       "Bash(npm init:*)",
       "Bash(node test-sanity.js)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(grep:*)",
+      "Bash(kill:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }

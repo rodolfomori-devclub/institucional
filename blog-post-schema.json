@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DevClub Blog Post",
+  "description": "Schema para criação de posts no blog DevClub via API",
+  "type": "object",
+  "required": ["title", "slug", "description", "body"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Título do post",
+      "minLength": 10,
+      "maxLength": 100,
+      "examples": [
+        "Como usar React Hooks na prática",
+        "JavaScript para Iniciantes: Guia Completo",
+        "Node.js: Criando APIs REST com Express"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL amigável do post (sem espaços, caracteres especiais ou acentos)",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 5,
+      "maxLength": 80,
+      "examples": [
+        "como-usar-react-hooks-pratica",
+        "javascript-iniciantes-guia-completo",
+        "nodejs-apis-rest-express"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "Descrição breve do post para SEO e preview",
+      "minLength": 50,
+      "maxLength": 160,
+      "examples": [
+        "Aprenda como usar React Hooks de forma prática com exemplos reais e dicas importantes para desenvolvimento frontend.",
+        "Guia completo de JavaScript para quem está começando na programação. Conceitos fundamentais explicados de forma simples.",
+        "Tutorial completo para criar APIs REST usando Node.js e Express. Desde a configuração até deploy em produção."
+      ]
+    },
+    "body": {
+      "type": "string",
+      "description": "Conteúdo completo do post em formato Markdown",
+      "minLength": 500,
+      "examples": [
+        "# Como usar React Hooks na prática\n\nReact Hooks revolucionaram a forma como escrevemos componentes React...\n\n## useState Hook\n\nO `useState` é o hook mais básico...\n\n```jsx\nimport React, { useState } from 'react'\n\nfunction Counter() {\n  const [count, setCount] = useState(0)\n  \n  return (\n    <div>\n      <p>Você clicou {count} vezes</p>\n      <button onClick={() => setCount(count + 1)}>\n        Clique aqui\n      </button>\n    </div>\n  )\n}\n```\n\n## useEffect Hook\n\nO `useEffect` permite executar efeitos colaterais...\n\n## Conclusão\n\nReact Hooks simplificam o desenvolvimento..."
+      ]
+    },
+    "author": {
+      "type": "string",
+      "description": "Nome do autor do post (opcional)",
+      "minLength": 2,
+      "maxLength": 50,
+      "examples": [
+        "DevClub",
+        "DevClub Team",
+        "DevClub IA",
+        "Equipe DevClub"
+      ]
+    },
+    "featured": {
+      "type": "boolean",
+      "description": "Se o post deve aparecer em destaque na home (opcional)",
+      "default": false,
+      "examples": [true, false]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "title": "Como usar React Hooks na prática",
+      "slug": "como-usar-react-hooks-pratica",
+      "description": "Aprenda como usar React Hooks de forma prática com exemplos reais e dicas importantes para desenvolvimento frontend.",
+      "body": "# Como usar React Hooks na prática\n\nReact Hooks revolucionaram a forma como escrevemos componentes React...\n\n## useState Hook\n\nO `useState` é o hook mais básico para gerenciar estado em componentes funcionais.\n\n```jsx\nimport React, { useState } from 'react'\n\nfunction Counter() {\n  const [count, setCount] = useState(0)\n  \n  return (\n    <div>\n      <p>Você clicou {count} vezes</p>\n      <button onClick={() => setCount(count + 1)}>\n        Clique aqui\n      </button>\n    </div>\n  )\n}\n```\n\n## useEffect Hook\n\nO `useEffect` permite executar efeitos colaterais como chamadas de API, subscriptions ou alterações manuais do DOM.\n\n```jsx\nimport React, { useState, useEffect } from 'react'\n\nfunction UserProfile({ userId }) {\n  const [user, setUser] = useState(null)\n  \n  useEffect(() => {\n    fetchUser(userId).then(setUser)\n  }, [userId])\n  \n  if (!user) return <div>Carregando...</div>\n  \n  return <div>Olá, {user.name}!</div>\n}\n```\n\n## Hooks Customizados\n\nVocê pode criar seus próprios hooks para reutilizar lógica:\n\n```jsx\nfunction useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue)\n  \n  const increment = () => setCount(count + 1)\n  const decrement = () => setCount(count - 1)\n  const reset = () => setCount(initialValue)\n  \n  return { count, increment, decrement, reset }\n}\n```\n\n## Conclusão\n\nReact Hooks simplificam o desenvolvimento e tornam o código mais limpo e reutilizável. Pratique bastante para dominar essas ferramentas poderosas!",
+      "author": "DevClub Team",
+      "featured": true
+    },
+    {
+      "title": "JavaScript para Iniciantes: Variáveis e Tipos",
+      "slug": "javascript-iniciantes-variaveis-tipos",
+      "description": "Aprenda sobre variáveis e tipos de dados em JavaScript. Tutorial básico perfeito para quem está começando a programar.",
+      "body": "# JavaScript para Iniciantes: Variáveis e Tipos\n\nJavaScript é uma linguagem de programação essencial para desenvolvimento web...\n\n## Declarando Variáveis\n\nExistem três formas de declarar variáveis em JavaScript:\n\n```javascript\nvar nome = 'João'      // escopo de função\nlet idade = 25         // escopo de bloco\nconst PI = 3.14159     // constante\n```\n\n## Tipos de Dados\n\n### String (Texto)\n```javascript\nconst nome = 'Maria'\nconst sobrenome = \"Silva\"\nconst nomeCompleto = `${nome} ${sobrenome}`\n```\n\n### Number (Números)\n```javascript\nconst idade = 30\nconst altura = 1.75\nconst temperatura = -5\n```\n\n### Boolean (Verdadeiro/Falso)\n```javascript\nconst ativo = true\nconst inativo = false\n```\n\n### Array (Lista)\n```javascript\nconst frutas = ['maçã', 'banana', 'laranja']\nconst numeros = [1, 2, 3, 4, 5]\n```\n\n### Object (Objeto)\n```javascript\nconst pessoa = {\n  nome: 'João',\n  idade: 30,\n  ativo: true\n}\n```\n\n## Próximos Passos\n\nAgora que você conhece os tipos básicos, pratique criando variáveis e experimente diferentes valores!"
+    }
+  ]
+}

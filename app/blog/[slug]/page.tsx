@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation'
 import PortableText from '@/components/blog/PortableText'
 
 export const revalidate = 60
+export const dynamicParams = true
 
 interface Props {
   params: {
@@ -16,10 +17,22 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const posts = await sanityClient.fetch(postPathsQuery)
-  return posts.map((post: { slug: string }) => ({
-    slug: post.slug,
-  }))
+  try {
+    const posts = await sanityClient.fetch(postPathsQuery)
+    
+    if (!posts || posts.length === 0) {
+      return []
+    }
+    
+    return posts
+      .filter((post: { slug: string }) => post.slug && post.slug.trim() !== '')
+      .map((post: { slug: string }) => ({
+        slug: post.slug,
+      }))
+  } catch (error) {
+    console.error('Error in generateStaticParams:', error)
+    return []
+  }
 }
 
 async function getPost(slug: string): Promise<Post | null> {
@@ -98,7 +111,7 @@ export default async function PostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       
-      <article className="min-h-screen py-20">
+      <article className="min-h-screen py-20 bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <header className="mb-10">
@@ -122,11 +135,11 @@ export default async function PostPage({ params }: Props) {
                 Voltar ao blog
               </Link>
 
-              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
                 {post.title}
               </h1>
 
-              <div className="flex items-center gap-4 text-gray-600 mb-8">
+              <div className="flex items-center gap-4 text-gray-400 mb-8">
                 <time className="text-sm">
                   {format(new Date(post.publishedAt), "d 'de' MMMM 'de' yyyy", {
                     locale: ptBR,
@@ -134,7 +147,7 @@ export default async function PostPage({ params }: Props) {
                 </time>
                 {post.author && (
                   <>
-                    <span className="text-gray-400">•</span>
+                    <span className="text-gray-500">•</span>
                     <span className="text-sm">Por {post.author}</span>
                   </>
                 )}
@@ -157,7 +170,7 @@ export default async function PostPage({ params }: Props) {
               <PortableText value={post.body} />
             </div>
 
-            <footer className="mt-16 pt-8 border-t border-gray-200">
+            <footer className="mt-16 pt-8 border-t border-gray-700">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                 <Link
                   href="/blog"
@@ -167,12 +180,12 @@ export default async function PostPage({ params }: Props) {
                 </Link>
                 
                 <div className="flex gap-4">
-                  <span className="text-gray-600">Compartilhe:</span>
+                  <span className="text-gray-400">Compartilhe:</span>
                   <a
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://devclub.com.br/blog/${params.slug}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-primary-600"
+                    className="text-gray-400 hover:text-primary-600"
                     aria-label="Compartilhar no Twitter"
                   >
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -183,7 +196,7 @@ export default async function PostPage({ params }: Props) {
                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://devclub.com.br/blog/${params.slug}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-primary-600"
+                    className="text-gray-400 hover:text-primary-600"
                     aria-label="Compartilhar no LinkedIn"
                   >
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

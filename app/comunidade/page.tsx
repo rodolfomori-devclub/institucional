@@ -52,13 +52,13 @@ export default function ComunidadePage() {
 
   return (
     <>
-      <section className="py-16 bg-gradient-to-br from-primary-50 to-white">
+      <section className="py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
               Faça parte da comunidade DevClub
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600">
+            <p className="text-lg sm:text-xl text-gray-200">
               Conecte-se com milhares de desenvolvedores, participe de eventos exclusivos 
               e construa projetos incríveis junto com a nossa comunidade.
             </p>

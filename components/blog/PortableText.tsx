@@ -135,34 +135,34 @@ const components = {
   },
   block: {
     h1: ({ children }: any) => (
-      <h1 className="text-4xl font-bold mt-8 mb-4 text-gray-900">{children}</h1>
+      <h1 className="text-4xl font-bold mt-8 mb-4 text-white">{children}</h1>
     ),
     h2: ({ children }: any) => (
-      <h2 className="text-3xl font-bold mt-8 mb-4 text-gray-900">{children}</h2>
+      <h2 className="text-3xl font-bold mt-8 mb-4 text-white">{children}</h2>
     ),
     h3: ({ children }: any) => (
-      <h3 className="text-2xl font-bold mt-6 mb-3 text-gray-900">{children}</h3>
+      <h3 className="text-2xl font-bold mt-6 mb-3 text-white">{children}</h3>
     ),
     h4: ({ children }: any) => (
-      <h4 className="text-xl font-bold mt-6 mb-3 text-gray-900">{children}</h4>
+      <h4 className="text-xl font-bold mt-6 mb-3 text-white">{children}</h4>
     ),
     normal: ({ children }: any) => (
-      <p className="text-lg text-gray-700 leading-relaxed mb-6">{children}</p>
+      <p className="text-lg text-gray-300 leading-relaxed mb-6">{children}</p>
     ),
     blockquote: ({ children }: any) => (
-      <blockquote className="border-l-4 border-primary-600 pl-6 my-6 italic text-gray-600">
+      <blockquote className="border-l-4 border-primary-600 pl-6 my-6 italic text-gray-400">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }: any) => (
-      <ul className="list-disc list-inside mb-6 space-y-2 text-gray-700">
+      <ul className="list-disc list-inside mb-6 space-y-2 text-gray-300">
         {children}
       </ul>
     ),
     number: ({ children }: any) => (
-      <ol className="list-decimal list-inside mb-6 space-y-2 text-gray-700">
+      <ol className="list-decimal list-inside mb-6 space-y-2 text-gray-300">
         {children}
       </ol>
     ),
@@ -189,7 +189,7 @@ const components = {
       <em className="italic">{children}</em>
     ),
     code: ({ children }: any) => (
-      <code className="bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono">
+      <code className="bg-gray-800 text-primary-400 px-1.5 py-0.5 rounded text-sm font-mono border border-gray-700">
         {children}
       </code>
     ),

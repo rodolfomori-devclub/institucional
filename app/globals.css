@@ -18,6 +18,22 @@
     @apply bg-secondary text-text-dark min-h-screen antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
@@ -43,6 +59,15 @@
     @apply bg-gradient-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent;
     background-size: 200% auto;
     animation: gradient 3s ease infinite;
+  }
+
+  /* Custom input styles */
+  .input-glow:hover {
+    @apply border-gray-500;
+  }
+  
+  .input-glow:focus {
+    box-shadow: 0 0 0 3px rgba(55, 227, 89, 0.1);
   }
 
   /* Glow button */

@@ -1,0 +1,36 @@
+{
+  "name": "create_blog_post",
+  "description": "Cria um post para o blog DevClub sobre desenvolvimento web e programação",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Título do post, claro e atrativo (10-100 caracteres)"
+      },
+      "slug": {
+        "type": "string", 
+        "description": "URL amigável sem espaços, acentos ou caracteres especiais (apenas letras minúsculas, números e hífens)"
+      },
+      "description": {
+        "type": "string",
+        "description": "Descrição breve para SEO e preview (50-160 caracteres)"
+      },
+      "body": {
+        "type": "string",
+        "description": "Conteúdo completo do post em formato Markdown (mínimo 500 caracteres)"
+      },
+      "author": {
+        "type": "string",
+        "description": "Nome do autor do post"
+      },
+      "featured": {
+        "type": "boolean",
+        "description": "Se o post deve aparecer em destaque na home"
+      }
+    },
+    "required": ["title", "slug", "description", "body", "author", "featured"],
+    "additionalProperties": false
+  }
+}

@@ -1,10 +1,98 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sanityClient } from '@/lib/sanity'
+import { blogPostPrompt } from '@/lib/ai-blog-prompt'
 
 const API_SECRET = process.env.IA_POST_API_SECRET || 'your-secret-key'
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 export async function POST(request: NextRequest) {
   try {
+    const data = await request.json()
+    
+    // Check if this is an AI generation request
+    if (data.topic) {
+      if (!OPENAI_API_KEY) {
+        return NextResponse.json(
+          { error: 'OpenAI API key not configured' },
+          { status: 500 }
+        )
+      }
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              {
+                role: 'system',
+                content: blogPostPrompt
+              },
+              {
+                role: 'user',
+                content: `Crie um post sobre: ${data.topic}`
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 4000,
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to generate content with AI')
+        }
+
+        const aiResponse = await response.json()
+        let content = aiResponse.choices[0].message.content
+        
+        // Clean the response in case it contains markdown code blocks
+        content = content.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim()
+        
+        // Parse the JSON response from AI
+        const postData = JSON.parse(content)
+        
+        // Generate image for the post
+        try {
+          const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
+          
+          const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+              model: 'dall-e-3',
+              prompt: imagePrompt,
+              size: '1024x1024',
+              quality: 'standard',
+              n: 1,
+            }),
+          })
+
+          if (imageResponse.ok) {
+            const imageData = await imageResponse.json()
+            postData.generatedImageUrl = imageData.data[0].url
+          }
+        } catch (imageError) {
+          console.warn('Failed to generate image, continuing without it:', imageError)
+        }
+        
+        return NextResponse.json(postData)
+      } catch (error: any) {
+        console.error('Error generating with AI:', error)
+        return NextResponse.json(
+          { error: 'Failed to generate content with AI', details: error.message },
+          { status: 500 }
+        )
+      }
+    }
+    
+    // Original functionality for creating posts with API secret
     const authHeader = request.headers.get('authorization')
     
     if (!authHeader || authHeader !== `Bearer ${API_SECRET}`) {
@@ -13,8 +101,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
-
-    const data = await request.json()
     
     const { title, slug, description, body, author } = data
 
@@ -75,7 +161,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error: any) {
-    console.error('Error creating post:', error)
+    console.error('Error in API route:', error)
     return NextResponse.json(
       { error: 'Internal server error', details: error.message },
       { status: 500 }
