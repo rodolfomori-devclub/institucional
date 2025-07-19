@@ -69,7 +69,7 @@ export default function PartnersSection() {
                       alt={`Logo ${partner.name}`}
                       width={120}
                       height={60}
-                      className="h-12 w-auto grayscale group-hover:grayscale-0 transition-all duration-300 filter brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
+                      className="h-12 w-auto group-hover:grayscale-0 transition-all duration-300 group-hover:brightness-100 group-hover:invert-0"
                     />
                   </div>
                 </div>
