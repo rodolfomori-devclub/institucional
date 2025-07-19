@@ -4,10 +4,32 @@
 
 @layer base {
   :root {
-    --primary: #37E359;
+    --background: 220 20% 6%;
+    --foreground: 220 10% 95%;
+    --card: 220 20% 8%;
+    --card-foreground: 220 10% 95%;
+    --popover: 220 20% 8%;
+    --popover-foreground: 220 10% 95%;
+    --primary: 142 86% 56%;
+    --primary-foreground: 220 10% 5%;
+    --secondary: 220 25% 12%;
+    --secondary-foreground: 220 10% 95%;
+    --muted: 220 25% 15%;
+    --muted-foreground: 220 10% 70%;
+    --accent: 220 25% 15%;
+    --accent-foreground: 220 10% 95%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 220 10% 95%;
+    --border: 220 25% 15%;
+    --input: 220 25% 15%;
+    --ring: 142 86% 56%;
+    --radius: 0.5rem;
+    
+    /* Legacy variables for backward compatibility */
+    --primary-hex: #37E359;
     --primary-dark: #2BC348;
     --primary-light: #52FF74;
-    --secondary: #051626;
+    --secondary-hex: #051626;
     --secondary-dark: #020A13;
     --secondary-light: #0A2E4D;
   }
@@ -15,7 +37,7 @@
 
 
   body {
-    @apply bg-secondary text-text-dark min-h-screen antialiased;
+    @apply bg-background text-foreground min-h-screen antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -37,11 +59,11 @@
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-secondary-dark;
+    @apply bg-muted;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -49,14 +71,14 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary-dark;
+    @apply bg-primary/80;
   }
 }
 
 @layer components {
   /* Gradient text effect */
   .gradient-text {
-    @apply bg-gradient-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent;
     background-size: 200% auto;
     animation: gradient 3s ease infinite;
   }
@@ -72,7 +94,7 @@
 
   /* Glow button */
   .btn-glow {
-    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-primary rounded-lg hover:bg-primary-dark;
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-primary rounded-lg hover:bg-primary/90;
     box-shadow: 0 0 20px rgba(55, 227, 89, 0.5);
   }
 
@@ -105,7 +127,7 @@
 
   /* Code block styling */
   .code-block {
-    @apply font-mono text-primary bg-secondary-dark rounded-lg p-4 overflow-x-auto;
+    @apply font-mono text-primary bg-muted rounded-lg p-4 overflow-x-auto;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
   }
 
@@ -126,12 +148,12 @@
   }
 
   .blob-2 {
-    @apply bg-primary-light w-64 h-64;
+    @apply bg-primary/80 w-64 h-64;
     animation-delay: 2s;
   }
 
   .blob-3 {
-    @apply bg-primary-dark w-80 h-80;
+    @apply bg-primary/60 w-80 h-80;
     animation-delay: 4s;
   }
 

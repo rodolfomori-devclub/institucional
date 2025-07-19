@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { sanityClient } from '@/lib/sanity'
 import { blogPostPrompt } from '@/lib/ai-blog-prompt'
+import { sanityClient } from '@/lib/sanity'
+import { NextRequest, NextResponse } from 'next/server'
+
 
 const API_SECRET = process.env.IA_POST_API_SECRET || 'your-secret-key'
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
@@ -8,7 +9,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
-    
+
     // Check if this is an AI generation request
     if (data.topic) {
       if (!OPENAI_API_KEY) {
@@ -47,18 +48,20 @@ export async function POST(request: NextRequest) {
         }
 
         const aiResponse = await response.json()
-        let content = aiResponse.choices[0].message.content
-        
-        // Clean the response in case it contains markdown code blocks
-        content = content.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim()
-        
-        // Parse the JSON response from AI
+        const content = aiResponse.choices[0].message.content
+
+        // Use robust JSON parsing
         const postData = JSON.parse(content)
-        
+
+        // Validate that we have the required fields
+        if (!postData.title || !postData.content) {
+          throw new Error('AI response missing required fields (title or content)')
+        }
+
         // Generate image for the post
         try {
           const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
-          
+
           const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
             method: 'POST',
             headers: {
@@ -81,7 +84,7 @@ export async function POST(request: NextRequest) {
         } catch (imageError) {
           console.warn('Failed to generate image, continuing without it:', imageError)
         }
-        
+
         return NextResponse.json(postData)
       } catch (error: any) {
         console.error('Error generating with AI:', error)
@@ -91,17 +94,17 @@ export async function POST(request: NextRequest) {
         )
       }
     }
-    
+
     // Original functionality for creating posts with API secret
     const authHeader = request.headers.get('authorization')
-    
+
     if (!authHeader || authHeader !== `Bearer ${API_SECRET}`) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
-    
+
     const { title, slug, description, body, author } = data
 
     if (!title || !slug || !description || !body) {
@@ -112,7 +115,7 @@ export async function POST(request: NextRequest) {
     }
 
     let processedBody
-    
+
     if (typeof body === 'string') {
       processedBody = body.split('\n\n').map(paragraph => ({
         _type: 'block',

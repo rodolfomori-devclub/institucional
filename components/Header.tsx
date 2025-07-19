@@ -1,11 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,10 +26,16 @@ export default function Header() {
     { name: 'Blog', href: '/blog' },
   ]
 
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return pathname === href
+    }
+    return pathname.includes(href)
+  }
+
   return (
-    <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-      scrolled ? 'glass shadow-lg backdrop-blur-lg' : 'bg-transparent'
-    }`}>
+    <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${scrolled ? 'glass shadow-lg backdrop-blur-lg' : 'bg-transparent'
+      }`}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
@@ -38,19 +46,19 @@ export default function Header() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </div>
-          
+
           <div className="hidden md:flex items-center space-x-8">
             {navigation.map((item, index) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="relative text-text-dark hover:text-primary transition-colors duration-200 font-medium group"
+                className={`relative text-text-dark hover:text-primary transition-colors duration-200 font-medium group ${isActive(item.href) && '!text-primary hover:!scale-105'}`}
                 style={{
                   animation: `slideDown 0.5s ease-out ${index * 0.1}s both`
                 }}
               >
                 <span className="relative z-10">{item.name}</span>
-                <span className="absolute inset-x-0 -bottom-2 h-0.5 bg-primary scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+                <span className={`absolute inset-x-0 -bottom-2 h-0.5 bg-primary scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${isActive(item.href) && '!scale-x-100'}`}></span>
               </Link>
             ))}
             <a
@@ -109,15 +117,14 @@ export default function Header() {
         </div>
 
         {/* Mobile menu */}
-        <div className={`md:hidden transition-all duration-300 overflow-hidden ${
-          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}>
+        <div className={`md:hidden transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          }`}>
           <div className="glass rounded-lg mt-2 p-4 space-y-1">
             {navigation.map((item, index) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block rounded-lg px-3 py-2 text-base font-medium text-text-dark hover:text-primary hover:bg-white/10 transition-all duration-200"
+                className={`block rounded-lg px-3 py-2 text-base font-medium text-text-dark hover:text-primary hover:bg-white/10 transition-all duration-200 ${isActive(item.href) && '!text-primary hover:!scale-105'}`}
                 onClick={() => setIsMenuOpen(false)}
                 style={{
                   animation: isMenuOpen ? `slideUp 0.3s ease-out ${index * 0.05}s both` : 'none'

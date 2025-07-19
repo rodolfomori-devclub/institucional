@@ -1,11 +1,12 @@
+import CTADisplay from '@/components/blog/CTADisplay'
+import PortableText from '@/components/blog/PortableText'
 import { generateSEO } from '@/components/SEO'
-import { sanityClient, postBySlugQuery, postPathsQuery, urlFor, type Post } from '@/lib/sanity'
+import { postBySlugQuery, postPathsQuery, sanityClient, urlFor, type Post } from '@/lib/sanity'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import PortableText from '@/components/blog/PortableText'
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -19,11 +20,11 @@ interface Props {
 export async function generateStaticParams() {
   try {
     const posts = await sanityClient.fetch(postPathsQuery)
-    
+
     if (!posts || posts.length === 0) {
       return []
     }
-    
+
     return posts
       .filter((post: { slug: string }) => post.slug && post.slug.trim() !== '')
       .map((post: { slug: string }) => ({
@@ -45,9 +46,31 @@ async function getPost(slug: string): Promise<Post | null> {
   }
 }
 
+async function getCTA() {
+  try {
+    // Get the base URL for the API call
+    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://devclub.com.br' : 'http://localhost:3000'
+
+    const response = await fetch(`${baseUrl}/api/cta`, {
+      next: { revalidate: 300 } // Cache for 5 minutes
+    })
+
+    if (!response.ok) {
+      console.error('Failed to fetch CTA:', response.status)
+      return { success: false, cta: null }
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Error fetching CTA:', error)
+    return { success: false, cta: null }
+  }
+}
+
 export async function generateMetadata({ params }: Props) {
   const post = await getPost(params.slug)
-  
+
   if (!post) {
     return generateSEO({
       title: 'Post não encontrado - DevClub',
@@ -56,7 +79,7 @@ export async function generateMetadata({ params }: Props) {
     })
   }
 
-  const imageUrl = post.mainImage 
+  const imageUrl = post.mainImage
     ? urlFor(post.mainImage).width(1200).height(630).url()
     : undefined
 
@@ -73,6 +96,8 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function PostPage({ params }: Props) {
   const post = await getPost(params.slug)
+  const ctaResponse = await getCTA()
+  const cta = ctaResponse?.cta || null
 
   if (!post) {
     notFound()
@@ -110,7 +135,7 @@ export default async function PostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
+
       <article className="min-h-screen py-20 bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
@@ -170,6 +195,8 @@ export default async function PostPage({ params }: Props) {
               <PortableText value={post.body} />
             </div>
 
+            {cta && <CTADisplay cta={cta} variant="blog" />}
+
             <footer className="mt-16 pt-8 border-t border-gray-700">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                 <Link
@@ -178,7 +205,7 @@ export default async function PostPage({ params }: Props) {
                 >
                   Ver mais artigos
                 </Link>
-                
+
                 <div className="flex gap-4">
                   <span className="text-gray-400">Compartilhe:</span>
                   <a
@@ -200,7 +227,7 @@ export default async function PostPage({ params }: Props) {
                     aria-label="Compartilhar no LinkedIn"
                   >
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                   </a>
                 </div>

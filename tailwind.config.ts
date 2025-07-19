@@ -10,7 +10,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
           50: '#F0FDF4',
           100: '#DCFCE7',
           200: '#BBF7D0',
@@ -21,18 +28,32 @@ const config: Config = {
           700: '#15803D',
           800: '#166534',
           900: '#14532D',
-          DEFAULT: '#37E359',
           dark: '#2BC348',
           light: '#52FF74',
         },
         secondary: {
-          DEFAULT: '#051626',
-          dark: '#020A13',
-          light: '#0A2E4D',
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
-        background: {
-          light: '#F8F9FA',
-          dark: '#121212',
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
         text: {
           light: '#051626',
@@ -42,6 +63,16 @@ const config: Config = {
             dark: '#94A3B8',
           },
         },
+        // Legacy colors for backward compatibility
+        'primary-light': '#52FF74',
+        'primary-dark': '#2BC348',
+        'secondary-dark': '#020A13',
+        'secondary-light': '#0A2E4D',
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
