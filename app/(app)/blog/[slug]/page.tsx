@@ -49,7 +49,7 @@ async function getPost(slug: string): Promise<Post | null> {
 async function getCTA() {
   try {
     // Get the base URL for the API call
-    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://devclub.com.br' : 'http://localhost:3000'
+    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://www.devclub.com.br' : 'http://localhost:3000'
 
     const response = await fetch(`${baseUrl}/api/cta`, {
       next: { revalidate: 300 } // Cache for 5 minutes
