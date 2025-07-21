@@ -94,6 +94,8 @@ export async function POST(request: NextRequest) {
 
     } catch (error: any) {
         console.error('Error generating topics:', error)
+        console.log('content', content)
+        console.log('parsedContent', JSON.parse(content))
         return NextResponse.json(
             { error: 'Failed to generate topics', details: error.message, content: content, parsedContent: JSON.parse(content) },
             { status: 500 }
