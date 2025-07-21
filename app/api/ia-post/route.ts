@@ -63,34 +63,12 @@ export async function POST(request: NextRequest) {
         throw new Error('AI response missing required fields (title or content)')
       }
 
-      // Generate image for the post
-      // try {
-      //   const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
-
-      //   const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'Authorization': `Bearer ${OPENAI_API_KEY}`,
-      //     },
-      //     body: JSON.stringify({
-      //       model: 'dall-e-3',
-      //       prompt: imagePrompt,
-      //       size: '1024x1024',
-      //       quality: 'standard',
-      //       n: 1,
-      //     }),
-      //   })
-
-      //   if (imageResponse.ok) {
-      //     const imageData = await imageResponse.json()
-      //     postData.generatedImageUrl = imageData.data[0].url
-      //   }
-      // } catch (imageError) {
-      //   console.warn('Failed to generate image, continuing without it:', imageError)
-      // }
-
-      return NextResponse.json(postData)
+      // Return immediately to avoid timeout
+      // Image generation can be added separately later
+      return NextResponse.json({
+        ...postData,
+        message: 'Content generated successfully. Image generation can be added in a separate step.'
+      })
     } catch (error: any) {
       console.error('Error generating with AI:', error)
       return NextResponse.json(

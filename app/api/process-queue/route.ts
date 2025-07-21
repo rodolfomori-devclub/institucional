@@ -1,5 +1,6 @@
 import { blogPostPrompt } from '@/lib/ai-blog-prompt'
 import { db } from '@/lib/firebase'
+import { parseJsonFromAI } from '@/lib/utils'
 import { collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -71,35 +72,35 @@ export async function POST(request: NextRequest) {
                 const content = aiResponse.choices[0].message.content
 
                 // Use robust JSON parsing
-                const generatedContent = JSON.parse(content)
+                const generatedContent = parseJsonFromAI(content)
 
                 // Generate image for the post
-                let generatedImageUrl = null
-                try {
-                    const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
+                // let generatedImageUrl = null
+                // try {
+                //     const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
 
-                    const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                        },
-                        body: JSON.stringify({
-                            model: 'dall-e-3',
-                            prompt: imagePrompt,
-                            size: '1024x1024',
-                            quality: 'standard',
-                            n: 1,
-                        }),
-                    })
+                //     const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //             'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                //         },
+                //         body: JSON.stringify({
+                //             model: 'dall-e-3',
+                //             prompt: imagePrompt,
+                //             size: '1024x1024',
+                //             quality: 'standard',
+                //             n: 1,
+                //         }),
+                //     })
 
-                    if (imageResponse.ok) {
-                        const imageData = await imageResponse.json()
-                        generatedImageUrl = imageData.data[0].url
-                    }
-                } catch (imageError) {
-                    console.warn('Failed to generate image for post:', postId, imageError)
-                }
+                //     if (imageResponse.ok) {
+                //         const imageData = await imageResponse.json()
+                //         generatedImageUrl = imageData.data[0].url
+                //     }
+                // } catch (imageError) {
+                //     console.warn('Failed to generate image for post:', postId, imageError)
+                // }
 
                 // Generate SEO keywords
                 const keywords = [
@@ -124,8 +125,8 @@ export async function POST(request: NextRequest) {
                     description: generatedContent.description || postData.description,
                     slug,
                     seoKeywords: keywords,
-                    generatedImageUrl,
-                    coverImage: generatedImageUrl,
+                    // generatedImageUrl,
+                    // coverImage: generatedImageUrl,
                     status: 'draft',
                     updatedAt: serverTimestamp(),
                     processedAt: serverTimestamp()
