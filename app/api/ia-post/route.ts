@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
-
+    let content = ''
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       }
 
       const aiResponse = await response.json()
-      const content = aiResponse.choices[0].message.content
+      content = aiResponse.choices[0].message.content
 
       // Use robust JSON parsing
       const postData = JSON.parse(content)
@@ -93,7 +93,11 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
       console.error('Error generating with AI:', error)
       return NextResponse.json(
-        { error: 'Failed to generate content with AI', details: error.message },
+        {
+          error: 'Failed to generate content with AI',
+          content: content,
+          parsedContent: JSON.parse(content)
+        },
         { status: 500 }
       )
     }
