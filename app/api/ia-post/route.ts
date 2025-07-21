@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const API_SECRET = process.env.IA_POST_API_SECRET || 'your-secret-key'
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+export const maxDuration = 300
 
 export async function POST(request: NextRequest) {
   const data = await request.json()
@@ -62,31 +63,31 @@ export async function POST(request: NextRequest) {
       }
 
       // Generate image for the post
-      try {
-        const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
+      // try {
+      //   const imagePrompt = `Create a modern, professional thumbnail image for a tech blog post about: ${postData.title}. The image should be visually appealing, tech-themed, and suitable for a programming/technology blog. Style: modern, clean, tech-focused.`
 
-        const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'dall-e-3',
-            prompt: imagePrompt,
-            size: '1024x1024',
-            quality: 'standard',
-            n: 1,
-          }),
-        })
+      //   const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       'Authorization': `Bearer ${OPENAI_API_KEY}`,
+      //     },
+      //     body: JSON.stringify({
+      //       model: 'dall-e-3',
+      //       prompt: imagePrompt,
+      //       size: '1024x1024',
+      //       quality: 'standard',
+      //       n: 1,
+      //     }),
+      //   })
 
-        if (imageResponse.ok) {
-          const imageData = await imageResponse.json()
-          postData.generatedImageUrl = imageData.data[0].url
-        }
-      } catch (imageError) {
-        console.warn('Failed to generate image, continuing without it:', imageError)
-      }
+      //   if (imageResponse.ok) {
+      //     const imageData = await imageResponse.json()
+      //     postData.generatedImageUrl = imageData.data[0].url
+      //   }
+      // } catch (imageError) {
+      //   console.warn('Failed to generate image, continuing without it:', imageError)
+      // }
 
       return NextResponse.json(postData)
     } catch (error: any) {
