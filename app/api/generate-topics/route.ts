@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+export const maxDuration = 300
 
 export async function POST(request: NextRequest) {
+    let content = ''
     try {
         const { subject } = await request.json()
 
@@ -68,7 +70,7 @@ export async function POST(request: NextRequest) {
         }
 
         const aiResponse = await response.json()
-        const content = aiResponse.choices[0].message.content
+        content = aiResponse.choices[0].message.content
 
         // Use robust JSON parsing
         const topics = JSON.parse(content)
@@ -93,7 +95,7 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
         console.error('Error generating topics:', error)
         return NextResponse.json(
-            { error: 'Failed to generate topics', details: error.message },
+            { error: 'Failed to generate topics', details: error.message, content: content, parsedContent: JSON.parse(content) },
             { status: 500 }
         )
     }

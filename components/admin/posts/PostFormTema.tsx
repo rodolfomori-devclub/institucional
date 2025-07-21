@@ -53,6 +53,7 @@ export default function PostFormTema({ onNext, onPrevious }: StepProps) {
             setValue('slug', data.slug)
             setValue('description', data.excerpt)
             setValue('body', data.content)
+            setValue('author', "DevClub")
 
             // Automatically proceed to preview step
             onNext()
