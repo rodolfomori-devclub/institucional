@@ -1,3 +1,4 @@
+import { parseJsonFromAI } from '@/lib/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     - Current trends and best practices in 2024
     - Mix of beginner, intermediate topics
     
-    Return as JSON array with this exact structure:
+    Return ONLY a valid JSON array (no markdown formatting) with this exact structure:
     [
       {
         "question": "What is ${subject} and how does it work?",
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
       }
     ]
     
-    Make sure all titles are engaging, SEO-optimized, and different from each other. Generate the posts in portuguese.`
+    Make sure all titles are engaging, SEO-optimized, and different from each other. Generate the posts in portuguese. Return ONLY the JSON array, no additional text or formatting.`
 
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are an expert content creator who generates viral programming topics based on real search data and trending questions.'
+                        content: 'You are an expert content creator who generates viral programming topics based on real search data and trending questions. Always return valid JSON without any markdown formatting.'
                     },
                     {
                         role: 'user',
@@ -72,8 +73,8 @@ export async function POST(request: NextRequest) {
         const aiResponse = await response.json()
         content = aiResponse.choices[0].message.content
 
-        // Use robust JSON parsing
-        const topics = JSON.parse(content)
+        // Use robust JSON parsing that handles markdown-wrapped content
+        const topics = parseJsonFromAI(content)
 
         // Validate that we got an array
         if (!Array.isArray(topics)) {
@@ -94,10 +95,12 @@ export async function POST(request: NextRequest) {
 
     } catch (error: any) {
         console.error('Error generating topics:', error)
-        console.log('content', content)
-        console.log('parsedContent', JSON.parse(content))
         return NextResponse.json(
-            { error: 'Failed to generate topics', details: error.message, content: content, parsedContent: JSON.parse(content) },
+            {
+                error: 'Failed to generate topics',
+                details: error.message,
+                content: content ? content.substring(0, 500) + '...' : 'No content received'
+            },
             { status: 500 }
         )
     }

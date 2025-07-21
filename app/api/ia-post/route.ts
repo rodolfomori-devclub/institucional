@@ -1,5 +1,6 @@
 import { blogPostPrompt } from '@/lib/ai-blog-prompt'
 import { sanityClient } from '@/lib/sanity'
+import { parseJsonFromAI } from '@/lib/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
 
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
           messages: [
             {
               role: 'system',
-              content: blogPostPrompt
+              content: `${blogPostPrompt}\n\nIMPORTANT: Return ONLY valid JSON without any markdown formatting or code blocks.`
             },
             {
               role: 'user',
@@ -54,8 +55,8 @@ export async function POST(request: NextRequest) {
       const aiResponse = await response.json()
       content = aiResponse.choices[0].message.content
 
-      // Use robust JSON parsing
-      const postData = JSON.parse(content)
+      // Use robust JSON parsing that handles markdown-wrapped content
+      const postData = parseJsonFromAI(content)
 
       // Validate that we have the required fields
       if (!postData.title || !postData.content) {
@@ -95,8 +96,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Failed to generate content with AI',
-          content: content,
-          parsedContent: JSON.parse(content)
+          details: error.message,
+          content: content ? content.substring(0, 500) + '...' : 'No content received'
         },
         { status: 500 }
       )
