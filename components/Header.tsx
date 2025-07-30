@@ -21,9 +21,13 @@ export default function Header() {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Sobre', href: '/sobre' },
-    // { name: 'Formações', href: '/formacoes' },
+    { name: 'Formações', href: '/formacoes' },
     // { name: 'Comunidade', href: '/comunidade' },
     { name: 'Blog', href: '/blog' },
+  ]
+
+  const externalLinks = [
+    { name: 'Nossos Alunos', href: 'https://stars.devclub.com.br' },
   ]
 
   const isActive = (href: string) => {
@@ -61,11 +65,25 @@ export default function Header() {
                 <span className={`absolute inset-x-0 -bottom-2 h-0.5 bg-primary scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${isActive(item.href) && '!scale-x-100'}`}></span>
               </Link>
             ))}
+            {externalLinks.map((item, index) => (
+              <a
+                key={item.name}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-dark hover:text-primary transition-colors duration-200 font-medium"
+                style={{
+                  animation: `slideDown 0.5s ease-out ${0.5 + index * 0.1}s both`
+                }}
+              >
+                {item.name}
+              </a>
+            ))}
             <a
               href="https://aulas.devclub.com.br"
               className="text-text-dark hover:text-primary transition-colors duration-200 font-medium"
               style={{
-                animation: 'slideDown 0.5s ease-out 0.6s both'
+                animation: 'slideDown 0.5s ease-out 0.7s both'
               }}
             >
               Login
@@ -74,7 +92,7 @@ export default function Header() {
               href="/#matricule-se"
               className="btn-glow shine"
               style={{
-                animation: 'slideDown 0.5s ease-out 0.7s both'
+                animation: 'slideDown 0.5s ease-out 0.8s both'
               }}
             >
               Matricule-se
@@ -133,12 +151,27 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            {externalLinks.map((item, index) => (
+              <a
+                key={item.name}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-lg px-3 py-2 text-base font-medium text-text-dark hover:text-primary hover:bg-white/10 transition-all duration-200"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  animation: isMenuOpen ? `slideUp 0.3s ease-out ${(5 + index) * 0.05}s both` : 'none'
+                }}
+              >
+                {item.name}
+              </a>
+            ))}
             <a
               href="https://aulas.devclub.com.br"
               className="block rounded-lg px-3 py-2 text-base font-medium text-text-dark hover:text-primary hover:bg-white/10 transition-all duration-200"
               onClick={() => setIsMenuOpen(false)}
               style={{
-                animation: isMenuOpen ? `slideUp 0.3s ease-out ${5 * 0.05}s both` : 'none'
+                animation: isMenuOpen ? `slideUp 0.3s ease-out ${6 * 0.05}s both` : 'none'
               }}
             >
               Login

@@ -75,7 +75,7 @@ export default function HeroSection() {
 
             <p className="text-xl sm:text-2xl text-text-muted-dark leading-relaxed animate-fade-in animation-delay-300">
               Aprenda as tecnologias mais demandadas do mercado com metodologia prática, 
-              mentoria ao vivo e suporte vitalício.
+              direito ao ponto e de forma simples.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animation-delay-500">
@@ -161,7 +161,7 @@ export default function HeroSection() {
               </div>
               <div>
                 <p className="text-sm font-medium text-text-dark">Próxima turma</p>
-                <p className="text-2xl font-bold gradient-text">15 de Janeiro</p>
+                <p className="text-2xl font-bold gradient-text">Em breve</p>
               </div>
             </div>
           </div>

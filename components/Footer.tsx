@@ -86,6 +86,17 @@ export default function Footer() {
                   Blog
                 </Link>
               </li>
+              <li>
+                <a 
+                  href="https://stars.devclub.com.br" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-text-muted-dark hover:text-primary transition-colors duration-200 flex items-center group"
+                >
+                  <span className="w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-4 mr-0 group-hover:mr-2"></span>
+                  Nossos Alunos
+                </a>
+              </li>
             </ul>
           </div>
           
