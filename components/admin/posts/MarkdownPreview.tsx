@@ -2,8 +2,7 @@
 
 import { memo } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
 import remarkGfm from 'remark-gfm'
 
 interface MarkdownPreviewProps {
@@ -83,16 +82,11 @@ const MarkdownPreview = memo(({ content, className = '' }: MarkdownPreviewProps)
             if (!inline && language) {
                 return (
                     <div className="my-6">
-                        <SyntaxHighlighter
-                            language={language}
-                            style={vscDarkPlus}
-                            className="!bg-gray-900 !rounded-lg"
-                            showLineNumbers={true}
-                            wrapLines={true}
-                            {...props}
-                        >
-                            {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                            <code className={`language-${language}`}>
+                                {String(children).replace(/\n$/, '')}
+                            </code>
+                        </pre>
                     </div>
                 )
             }

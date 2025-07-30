@@ -3,8 +3,7 @@
 import { PortableText as PortableTextComponent } from '@portabletext/react'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
 
 const components = {
   types: {
@@ -32,13 +31,11 @@ const components = {
               {value.filename}
             </div>
           )}
-          <SyntaxHighlighter
-            language={value.language || 'javascript'}
-            style={vscDarkPlus}
-            className="!mt-0 !rounded-t-none"
-          >
-            {value.code}
-          </SyntaxHighlighter>
+          <pre className="bg-gray-900 text-gray-100 p-4 rounded-b-lg overflow-x-auto">
+            <code className={`language-${value.language || 'javascript'}`}>
+              {value.code}
+            </code>
+          </pre>
         </div>
       )
     },
