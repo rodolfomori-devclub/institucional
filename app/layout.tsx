@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Aldrich } from 'next/font/google'
 import './globals.css'
 
 
-const inter = Inter({ subsets: ['latin'] })
+const aldrich = Aldrich({ 
+    weight: '400',
+    subsets: ['latin'],
+    display: 'swap',
+})
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://devclub.com.br'),
@@ -82,7 +86,7 @@ export default function RootLayout({
                 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
                 <link rel="manifest" href="/manifest.json" />
             </head>
-            <body className={inter.className}>
+            <body className={aldrich.className}>
                 {children}
             </body>
         </html>
