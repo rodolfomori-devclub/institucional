@@ -119,7 +119,7 @@ export default function FeaturesSection() {
                 animationDelay: isVisible ? `${index * 100}ms` : '0ms'
               }}
             >
-              <div className="glass rounded-2xl p-8 h-full hover:shadow-neon transition-all duration-300 hover:translate-y-[-5px]">
+              <div className="glass rounded-2xl p-8 h-full hover:shadow-neon transition-all duration-300 hover:translate-y-[-5px] cursor-pointer">
                 {/* Icon background */}
                 <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} p-0.5 mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <div className="w-full h-full bg-secondary-dark rounded-xl flex items-center justify-center">
@@ -148,7 +148,7 @@ export default function FeaturesSection() {
           <p className="text-lg text-text-muted-dark mb-6">
             Pronto para começar sua jornada?
           </p>
-          <a href="/formacoes" className="btn-glow shine text-lg">
+          <a href="/formacoes" className="btn-glow shine text-lg cursor-pointer">
             Conhecer formações
             <svg className="ml-2 h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />

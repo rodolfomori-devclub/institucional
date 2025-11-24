@@ -1,6 +1,31 @@
 import { generateSEO } from '@/components/SEO'
 import { formacoes } from '@/lib/formacoes'
 import Link from 'next/link'
+import TechIcon from '@/components/TechIcon'
+
+// Mapeamento de tecnologias para ícones do Devicon
+function getTechIcon(tech: string): string {
+  const iconMap: { [key: string]: string } = {
+    'HTML': 'html5/html5-original.svg',
+    'CSS': 'css3/css3-original.svg',
+    'JavaScript': 'javascript/javascript-original.svg',
+    'React': 'react/react-original.svg',
+    'Next.js': 'nextjs/nextjs-original.svg',
+    'Node.js': 'nodejs/nodejs-original.svg',
+    'MongoDB': 'mongodb/mongodb-original.svg',
+    'PostgreSQL': 'postgresql/postgresql-original.svg',
+    'TypeScript': 'typescript/typescript-original.svg',
+    'Tailwind CSS': 'tailwindcss/tailwindcss-original.svg',
+    'Express': 'express/express-original.svg',
+    'Docker': 'docker/docker-original.svg',
+    'AWS': 'amazonwebservices/amazonwebservices-original-wordmark.svg',
+    'React Native': 'react/react-original.svg',
+    'Expo': 'expo/expo-original.svg',
+    'Firebase': 'firebase/firebase-plain.svg',
+  }
+
+  return iconMap[tech] || 'devicon/devicon-original.svg'
+}
 
 export const metadata = generateSEO({
   title: 'Formações em Programação - DevClub',
@@ -20,7 +45,7 @@ export const metadata = generateSEO({
 export default function FormacoesPage() {
   return (
     <>
-      <section className="py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-900">
+      <section className="pt-32 pb-16 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
@@ -40,42 +65,32 @@ export default function FormacoesPage() {
             {formacoes.map((formacao) => (
               <article
                 key={formacao.slug}
-                className="bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-700"
+                className="bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-700 cursor-pointer"
               >
                 <div className="p-8">
-                  <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-2xl font-bold text-white">
-                      {formacao.title}
-                    </h2>
-                    <div className="bg-gray-700 px-3 py-1 rounded-full text-sm font-medium text-primary border border-gray-600">
-                      {formacao.duration}
-                    </div>
-                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-6">
+                    {formacao.title}
+                  </h2>
                   <p className="text-gray-300 mb-6">
                     {formacao.description}
                   </p>
                   <div className="mb-6">
                     <p className="text-sm font-medium text-gray-400 mb-2">Tecnologias:</p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {formacao.technologies.slice(0, 5).map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 bg-gray-700 text-gray-200 text-sm rounded-full border border-gray-600"
-                        >
-                          {tech}
-                        </span>
+                        <TechIcon key={tech} tech={tech} iconPath={getTechIcon(tech)} />
                       ))}
                       {formacao.technologies.length > 5 && (
-                        <span className="px-3 py-1 bg-gray-700 text-gray-200 text-sm rounded-full border border-gray-600">
+                        <div className="flex items-center px-3 py-2 bg-gray-700 text-gray-200 text-sm rounded-lg border border-gray-600">
                           +{formacao.technologies.length - 5}
-                        </span>
+                        </div>
                       )}
                     </div>
                   </div>
                   <div className="flex flex-col gap-4">
                     <Link
                       href={`/formacoes/${formacao.slug}`}
-                      className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-700 transition-colors duration-200"
+                      className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-700 transition-colors duration-200 cursor-pointer"
                     >
                       Ver detalhes
                       <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -86,7 +101,7 @@ export default function FormacoesPage() {
                       href="https://rodolfomori.typeform.com/to/rQb1MBt5"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center px-6 py-3 bg-gray-700 text-white font-medium rounded-lg hover:bg-gray-600 transition-colors duration-200 border border-gray-600"
+                      className="inline-flex items-center justify-center px-6 py-3 bg-gray-700 text-white font-medium rounded-lg hover:bg-gray-600 transition-colors duration-200 border border-gray-600 cursor-pointer"
                     >
                       Falar com especialista
                       <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -110,7 +125,7 @@ export default function FormacoesPage() {
               href="https://rodolfomori.typeform.com/to/rQb1MBt5"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-700 transition-colors duration-200"
+              className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-700 transition-colors duration-200 cursor-pointer"
             >
               Falar com especialista
               <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">

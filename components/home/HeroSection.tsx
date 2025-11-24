@@ -81,7 +81,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animation-delay-500">
               <Link
                 href="/formacoes"
-                className="btn-glow group"
+                className="btn-glow group cursor-pointer"
               >
                 <span className="relative z-10">Ver Formações</span>
                 <svg className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -90,7 +90,7 @@ export default function HeroSection() {
               </Link>
               <Link
                 href="/sobre"
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-secondary transition-all duration-300 group neon-border"
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-secondary transition-all duration-300 group neon-border cursor-pointer"
               >
                 <span className="relative z-10">Conhecer o DevClub</span>
               </Link>

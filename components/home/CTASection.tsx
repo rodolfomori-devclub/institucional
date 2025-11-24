@@ -51,7 +51,7 @@ export default function CTASection() {
           <div className={`flex flex-col sm:flex-row gap-6 justify-center mb-12 ${isVisible ? 'animate-slide-up animation-delay-400' : 'opacity-0'}`}>
             <Link
               href="/formacoes"
-              className="group relative inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-secondary bg-primary rounded-lg overflow-hidden transition-all duration-300 hover:scale-105"
+              className="group relative inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-secondary bg-primary rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               <span className="relative z-10 flex items-center">
@@ -65,7 +65,7 @@ export default function CTASection() {
               href="https://rodolfomori.typeform.com/to/rQb1MBt5"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-primary border-2 border-primary rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 neon-border"
+              className="group relative inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-primary border-2 border-primary rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 neon-border cursor-pointer"
             >
               <span className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               <span className="relative z-10 flex items-center group-hover:text-secondary transition-colors duration-300">

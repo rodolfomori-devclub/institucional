@@ -59,12 +59,8 @@ export default function FormacaoPage({ params }: { params: { slug: string } }) {
               <p className="text-lg text-gray-300 mb-8">
                 {formacao.description}
               </p>
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                  <p className="text-sm text-gray-400">Duração</p>
-                  <p className="text-lg font-semibold text-white">{formacao.duration}</p>
-                </div>
-                <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+              <div className="mb-8">
+                <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 inline-block">
                   <p className="text-sm text-gray-400">Nível</p>
                   <p className="text-lg font-semibold text-white">{formacao.level}</p>
                 </div>

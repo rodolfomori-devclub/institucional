@@ -134,7 +134,7 @@ export default function TestimonialsSection() {
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
                   index === currentIndex
                     ? 'bg-primary w-8 shadow-neon'
                     : 'bg-primary/30 hover:bg-primary/50'
@@ -148,19 +148,19 @@ export default function TestimonialsSection() {
         {/* Stats */}
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 ${isVisible ? 'animate-slide-up animation-delay-600' : 'opacity-0'}`}>
           <div className="text-center">
-            <div className="glass rounded-2xl p-8 hover:shadow-neon transition-all duration-300">
-              <p className="text-5xl font-black gradient-text mb-2">+10.000</p>
-              <p className="text-text-muted-dark">Alunos transformados</p>
+            <div className="glass rounded-2xl p-8 hover:shadow-neon transition-all duration-300 cursor-pointer">
+              <p className="text-5xl font-black gradient-text mb-2">+15.000</p>
+              <p className="text-text-muted-dark">Alunos com a vida transformada</p>
             </div>
           </div>
           <div className="text-center">
-            <div className="glass rounded-2xl p-8 hover:shadow-neon transition-all duration-300">
+            <div className="glass rounded-2xl p-8 hover:shadow-neon transition-all duration-300 cursor-pointer">
               <p className="text-5xl font-black gradient-text mb-2">95%</p>
               <p className="text-text-muted-dark">Taxa de empregabilidade</p>
             </div>
           </div>
           <div className="text-center">
-            <div className="glass rounded-2xl p-8 hover:shadow-neon transition-all duration-300">
+            <div className="glass rounded-2xl p-8 hover:shadow-neon transition-all duration-300 cursor-pointer">
               <p className="text-5xl font-black gradient-text mb-2">4.9/5</p>
               <p className="text-text-muted-dark">Avaliação média</p>
             </div>
