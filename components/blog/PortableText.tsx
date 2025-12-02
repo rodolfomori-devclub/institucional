@@ -3,6 +3,7 @@
 import { PortableText as PortableTextComponent } from '@portabletext/react'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
+import MarkdownRenderer from './MarkdownRenderer'
 
 
 const components = {
@@ -24,6 +25,9 @@ const components = {
       )
     },
     code: ({ value }: any) => {
+      if (value.language === 'markdown-content') {
+        return <MarkdownRenderer content={value.code} />
+      }
       return (
         <div className="my-8">
           {value.filename && (
@@ -45,10 +49,10 @@ const components = {
         const match = url.match(regex)
         return match ? match[1] : null
       }
-      
+
       const videoId = getYouTubeId(value.url)
       if (!videoId) return null
-      
+
       return (
         <div className="my-8 relative aspect-video">
           <iframe
@@ -62,7 +66,7 @@ const components = {
     },
     embed: ({ value }: any) => {
       const { url, type } = value
-      
+
       if (type === 'twitter') {
         return (
           <div className="my-8">
@@ -73,7 +77,7 @@ const components = {
           </div>
         )
       }
-      
+
       if (type === 'codepen') {
         const getPenId = (url: string) => {
           const match = url.match(/codepen\.io\/[\w-]+\/pen\/([\w-]+)/)
@@ -81,7 +85,7 @@ const components = {
         }
         const penId = getPenId(url)
         if (!penId) return null
-        
+
         return (
           <div className="my-8">
             <iframe
@@ -97,7 +101,7 @@ const components = {
           </div>
         )
       }
-      
+
       if (type === 'codesandbox') {
         return (
           <div className="my-8">
@@ -111,7 +115,7 @@ const components = {
           </div>
         )
       }
-      
+
       if (type === 'gist') {
         const getGistId = (url: string) => {
           const match = url.match(/gist\.github\.com\/[\w-]+\/([\w]+)/)
@@ -119,14 +123,14 @@ const components = {
         }
         const gistId = getGistId(url)
         if (!gistId) return null
-        
+
         return (
           <div className="my-8">
             <script src={`https://gist.github.com/${gistId}.js`} />
           </div>
         )
       }
-      
+
       return null
     },
   },
