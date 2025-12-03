@@ -4,8 +4,9 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Eye, Plus, RefreshCw, Trash2, Upload } from 'lucide-react'
+import { Eye, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -19,6 +20,7 @@ interface Post {
     status: 'draft' | 'published' | 'generate' | 'failed'
     createdAt: any
     updatedAt: any
+    publishedAt?: any
     subject?: string
     slug?: string
 }
@@ -32,6 +34,7 @@ export default function PostsList() {
     const [publishingPosts, setPublishingPosts] = useState<string[]>([])
     const [deletingPosts, setDeletingPosts] = useState<string[]>([])
     const [activeTab, setActiveTab] = useState<'draft' | 'published'>('draft')
+    const [searchTerm, setSearchTerm] = useState('')
 
     // Fetch posts from API
     const fetchPosts = async () => {
@@ -56,6 +59,7 @@ export default function PostsList() {
     useEffect(() => {
         fetchPosts()
         setSelectedPosts([]) // Clear selection when switching tabs
+        setSearchTerm('') // Clear search when switching tabs
     }, [activeTab])
 
     // Handle individual post selection
@@ -69,13 +73,12 @@ export default function PostsList() {
 
     // Handle select all
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const currentPosts = posts.filter(post => post.status === activeTab)
-        const allSelected = currentPosts.length > 0 && currentPosts.every(post => selectedPosts.includes(post.id))
+        const allSelected = filteredPosts.length > 0 && filteredPosts.every(post => selectedPosts.includes(post.id))
 
         if (allSelected) {
             setSelectedPosts([])
         } else {
-            setSelectedPosts(currentPosts.map(post => post.id))
+            setSelectedPosts(filteredPosts.map(post => post.id))
         }
     }
 
@@ -297,8 +300,28 @@ export default function PostsList() {
         return text.substring(0, maxLength) + '...'
     }
 
-    const currentPosts = posts.filter(post => post.status === activeTab)
-    const allSelected = currentPosts.length > 0 && currentPosts.every(post => selectedPosts.includes(post.id))
+    // Filter and Sort Posts
+    const filteredPosts = posts
+        .filter(post => {
+            // Filter by status (already done by API but good for safety)
+            if (post.status !== activeTab) return false
+
+            // Filter by search term
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase()
+                return post.title.toLowerCase().includes(term) ||
+                    (post.description && post.description.toLowerCase().includes(term))
+            }
+            return true
+        })
+        .sort((a, b) => {
+            // Sort by date (newest first)
+            const dateA = new Date(a.publishedAt || a.createdAt).getTime()
+            const dateB = new Date(b.publishedAt || b.createdAt).getTime()
+            return dateB - dateA
+        })
+
+    const allSelected = filteredPosts.length > 0 && filteredPosts.every(post => selectedPosts.includes(post.id))
 
     return (
         <div className="p-6 space-y-6">
@@ -349,6 +372,20 @@ export default function PostsList() {
                 </button>
             </div>
 
+            {/* Filters and Search */}
+            <div className="flex items-center gap-4">
+                <div className="relative flex-1 max-w-sm">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        type="search"
+                        placeholder="Buscar por título..."
+                        className="pl-8"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+            </div>
+
             {/* Bulk Actions */}
             {selectedPosts.length > 0 && (
                 <Card>
@@ -383,12 +420,12 @@ export default function PostsList() {
             )}
 
             {/* Quick Actions */}
-            {activeTab === 'draft' && currentPosts.length > 0 && (
+            {activeTab === 'draft' && filteredPosts.length > 0 && (
                 <Card>
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <span className="text-sm text-muted-foreground">
-                                {currentPosts.length} post(s) em rascunho
+                                {filteredPosts.length} post(s) em rascunho
                             </span>
                             <Button
                                 size="sm"
@@ -417,10 +454,12 @@ export default function PostsList() {
                         <div className="flex items-center justify-center py-12">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                         </div>
-                    ) : posts.length === 0 ? (
+                    ) : filteredPosts.length === 0 ? (
                         <div className="text-center py-12">
-                            <p className="text-muted-foreground">Nenhum post encontrado</p>
-                            {activeTab === 'draft' && (
+                            <p className="text-muted-foreground">
+                                {searchTerm ? 'Nenhum post encontrado com este filtro' : 'Nenhum post encontrado'}
+                            </p>
+                            {activeTab === 'draft' && !searchTerm && (
                                 <Link href="/admin/posts/create">
                                     <Button className="mt-4">
                                         <Plus className="w-4 h-4 mr-2" />
@@ -447,7 +486,7 @@ export default function PostsList() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {posts.map((post) => (
+                                {filteredPosts.map((post) => (
                                     <TableRow key={post.id}>
                                         <TableCell>
                                             <Checkbox
@@ -465,7 +504,9 @@ export default function PostsList() {
                                             {getStatusBadge(post.status)}
                                         </TableCell>
                                         <TableCell>
-                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : 'N/A'}
+                                            {post.publishedAt
+                                                ? new Date(post.publishedAt).toLocaleDateString('pt-BR')
+                                                : (post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : 'N/A')}
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex gap-1">

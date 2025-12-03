@@ -4,7 +4,6 @@ import { sanityClient } from '@/lib/sanity'
 import { collection, deleteDoc, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore'
 import { NextRequest, NextResponse } from 'next/server'
 
-
 // Criar um client com token para operações de escrita no Sanity
 const writeClient = sanityClient.withConfig({
     token: process.env.SANITY_API_TOKEN,
@@ -23,11 +22,13 @@ export async function GET(request: NextRequest) {
 
         const posts: any[] = []
         querySnapshot.forEach((doc) => {
+            const data = doc.data()
             posts.push({
                 id: doc.id,
-                ...doc.data(),
-                createdAt: doc.data().createdAt.toDate(),
-                updatedAt: doc.data().updatedAt.toDate()
+                ...data,
+                createdAt: data.createdAt?.toDate(),
+                updatedAt: data.updatedAt?.toDate(),
+                publishedAt: data.publishedAt?.toDate ? data.publishedAt.toDate() : data.publishedAt
             })
         })
 
