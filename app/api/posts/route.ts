@@ -4,6 +4,7 @@ import { sanityClient } from '@/lib/sanity'
 import { collection, deleteDoc, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore'
 import { NextRequest, NextResponse } from 'next/server'
 
+
 // Criar um client com token para operações de escrita no Sanity
 const writeClient = sanityClient.withConfig({
     token: process.env.SANITY_API_TOKEN,
@@ -110,11 +111,36 @@ export async function POST(request: NextRequest) {
                 }
             }
         } else if (action === 'delete') {
-            // Delete posts from Firebase
+            // Delete posts from Firebase and Sanity
             for (const postId of postIds) {
                 try {
+                    // Get post from Firebase to check for Sanity ID
+                    const postsCollection = collection(db, 'posts')
+                    const q = query(postsCollection, where('__name__', '==', postId))
+                    const querySnapshot = await getDocs(q)
+
+                    if (querySnapshot.empty) {
+                        results.push({ id: postId, success: false, error: 'Post not found' })
+                        continue
+                    }
+
+                    const docSnapshot = querySnapshot.docs[0]
+                    const postData = docSnapshot.data()
+
+                    // Delete from Sanity if sanityId exists
+                    if (postData.sanityId) {
+                        try {
+                            await writeClient.delete(postData.sanityId)
+                        } catch (sanityError) {
+                            console.error(`Error deleting Sanity post ${postData.sanityId}:`, sanityError)
+                            // Continue to delete from Firebase even if Sanity delete fails (or maybe it was already deleted)
+                        }
+                    }
+
+                    // Delete from Firebase
                     const postRef = doc(db, 'posts', postId)
                     await deleteDoc(postRef)
+
                     results.push({ id: postId, success: true })
                 } catch (error: any) {
                     console.error(`Error deleting post ${postId}:`, error)
@@ -153,4 +179,64 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         )
     }
-} 
+
+}
+
+export async function DELETE(request: NextRequest) {
+    try {
+        const body = await request.json()
+        // Support both single postId and array of ids
+        const ids = body.ids || (body.postId ? [body.postId] : [])
+
+        if (ids.length === 0) {
+            return NextResponse.json(
+                { error: 'Post ID(s) required' },
+                { status: 400 }
+            )
+        }
+
+        const results = []
+
+        for (const id of ids) {
+            try {
+                // Get post from Firebase to check for Sanity ID
+                const postsCollection = collection(db, 'posts')
+                const q = query(postsCollection, where('__name__', '==', id))
+                const querySnapshot = await getDocs(q)
+
+                if (querySnapshot.empty) {
+                    results.push({ id, success: false, error: 'Post not found' })
+                    continue
+                }
+
+                const docSnapshot = querySnapshot.docs[0]
+                const postData = docSnapshot.data()
+
+                // Delete from Sanity if sanityId exists
+                if (postData.sanityId) {
+                    try {
+                        await writeClient.delete(postData.sanityId)
+                    } catch (sanityError) {
+                        console.error(`Error deleting Sanity post ${postData.sanityId}:`, sanityError)
+                    }
+                }
+
+                // Delete from Firebase
+                await deleteDoc(doc(db, 'posts', id))
+
+                results.push({ id, success: true })
+            } catch (error: any) {
+                console.error(`Error deleting post ${id}:`, error)
+                results.push({ id, success: false, error: error.message })
+            }
+        }
+
+        return NextResponse.json({ success: true, results })
+    } catch (error: any) {
+        console.error('Error deleting post:', error)
+        return NextResponse.json(
+            { error: 'Failed to delete post', details: error.message },
+            { status: 500 }
+        )
+    }
+}

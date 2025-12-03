@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sanityClient } from '@/lib/sanity'
+import { db } from '@/lib/firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
 // Criar um client com token para operações de escrita
 const writeClient = sanityClient.withConfig({
@@ -47,6 +49,20 @@ export async function POST(request: NextRequest) {
         }
 
         const result = await writeClient.create(doc)
+
+        // Save to Firebase
+        await addDoc(collection(db, 'posts'), {
+            title,
+            slug: finalSlug,
+            description,
+            content: body,
+            status: 'published',
+            publishedAt: serverTimestamp(),
+            sanityId: result._id,
+            author: author || 'DevClub IA',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        })
 
         return NextResponse.json({ success: true, post: result })
     } catch (error: any) {

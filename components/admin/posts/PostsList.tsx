@@ -31,12 +31,13 @@ export default function PostsList() {
     const [selectedPosts, setSelectedPosts] = useState<string[]>([])
     const [publishingPosts, setPublishingPosts] = useState<string[]>([])
     const [deletingPosts, setDeletingPosts] = useState<string[]>([])
+    const [activeTab, setActiveTab] = useState<'draft' | 'published'>('draft')
 
     // Fetch posts from API
     const fetchPosts = async () => {
         setLoading(true)
         try {
-            const response = await fetch('/api/posts?status=draft')
+            const response = await fetch(`/api/posts?status=${activeTab}`)
             const data = await response.json()
 
             if (data.success) {
@@ -54,7 +55,8 @@ export default function PostsList() {
 
     useEffect(() => {
         fetchPosts()
-    }, [])
+        setSelectedPosts([]) // Clear selection when switching tabs
+    }, [activeTab])
 
     // Handle individual post selection
     const handlePostSelect = (postId: string) => {
@@ -67,13 +69,13 @@ export default function PostsList() {
 
     // Handle select all
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const draftPosts = posts.filter(post => post.status === 'draft')
-        const allSelected = draftPosts.length > 0 && draftPosts.every(post => selectedPosts.includes(post.id))
+        const currentPosts = posts.filter(post => post.status === activeTab)
+        const allSelected = currentPosts.length > 0 && currentPosts.every(post => selectedPosts.includes(post.id))
 
         if (allSelected) {
             setSelectedPosts([])
         } else {
-            setSelectedPosts(draftPosts.map(post => post.id))
+            setSelectedPosts(currentPosts.map(post => post.id))
         }
     }
 
@@ -295,8 +297,8 @@ export default function PostsList() {
         return text.substring(0, maxLength) + '...'
     }
 
-    const draftPosts = posts.filter(post => post.status === 'draft')
-    const allDraftSelected = draftPosts.length > 0 && draftPosts.every(post => selectedPosts.includes(post.id))
+    const currentPosts = posts.filter(post => post.status === activeTab)
+    const allSelected = currentPosts.length > 0 && currentPosts.every(post => selectedPosts.includes(post.id))
 
     return (
         <div className="p-6 space-y-6">
@@ -304,7 +306,7 @@ export default function PostsList() {
                 <div>
                     <h1 className="text-3xl font-bold">Gerenciar Posts</h1>
                     <p className="text-muted-foreground">
-                        Gerencie todos os seus posts em rascunho
+                        Gerencie todos os seus posts
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -325,6 +327,28 @@ export default function PostsList() {
                 </div>
             </div>
 
+            {/* Tabs */}
+            <div className="flex space-x-2 border-b">
+                <button
+                    className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === 'draft'
+                            ? 'border-primary text-primary'
+                            : 'border-transparent text-muted-foreground hover:text-foreground'
+                        }`}
+                    onClick={() => setActiveTab('draft')}
+                >
+                    Rascunhos
+                </button>
+                <button
+                    className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === 'published'
+                            ? 'border-primary text-primary'
+                            : 'border-transparent text-muted-foreground hover:text-foreground'
+                        }`}
+                    onClick={() => setActiveTab('published')}
+                >
+                    Publicados
+                </button>
+            </div>
+
             {/* Bulk Actions */}
             {selectedPosts.length > 0 && (
                 <Card>
@@ -337,7 +361,8 @@ export default function PostsList() {
                                 <Button
                                     size="sm"
                                     onClick={handlePublishSelected}
-                                    disabled={publishingPosts.length > 0}
+                                    disabled={publishingPosts.length > 0 || activeTab === 'published'}
+                                    className={activeTab === 'published' ? 'hidden' : ''}
                                 >
                                     <Upload className="w-4 h-4 mr-2" />
                                     Publicar Selecionados
@@ -358,12 +383,12 @@ export default function PostsList() {
             )}
 
             {/* Quick Actions */}
-            {draftPosts.length > 0 && (
+            {activeTab === 'draft' && currentPosts.length > 0 && (
                 <Card>
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <span className="text-sm text-muted-foreground">
-                                {draftPosts.length} post(s) em rascunho
+                                {currentPosts.length} post(s) em rascunho
                             </span>
                             <Button
                                 size="sm"
@@ -382,9 +407,9 @@ export default function PostsList() {
             {/* Posts Table */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Posts em Rascunho</CardTitle>
+                    <CardTitle>Posts {activeTab === 'draft' ? 'em Rascunho' : 'Publicados'}</CardTitle>
                     <CardDescription>
-                        Lista de todos os posts que estão aguardando publicação
+                        Lista de todos os posts {activeTab === 'draft' ? 'que estão aguardando publicação' : 'publicados no blog'}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -395,12 +420,14 @@ export default function PostsList() {
                     ) : posts.length === 0 ? (
                         <div className="text-center py-12">
                             <p className="text-muted-foreground">Nenhum post encontrado</p>
-                            <Link href="/admin/posts/create">
-                                <Button className="mt-4">
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Criar Primeiro Post
-                                </Button>
-                            </Link>
+                            {activeTab === 'draft' && (
+                                <Link href="/admin/posts/create">
+                                    <Button className="mt-4">
+                                        <Plus className="w-4 h-4 mr-2" />
+                                        Criar Primeiro Post
+                                    </Button>
+                                </Link>
+                            )}
                         </div>
                     ) : (
                         <Table>
@@ -408,7 +435,7 @@ export default function PostsList() {
                                 <TableRow>
                                     <TableHead className="w-12">
                                         <Checkbox
-                                            checked={allDraftSelected}
+                                            checked={allSelected}
                                             onChange={handleSelectAll}
                                         />
                                     </TableHead>
@@ -423,12 +450,10 @@ export default function PostsList() {
                                 {posts.map((post) => (
                                     <TableRow key={post.id}>
                                         <TableCell>
-                                            {post.status === 'draft' && (
-                                                <Checkbox
-                                                    checked={selectedPosts.includes(post.id)}
-                                                    onChange={() => handlePostSelect(post.id)}
-                                                />
-                                            )}
+                                            <Checkbox
+                                                checked={selectedPosts.includes(post.id)}
+                                                onChange={() => handlePostSelect(post.id)}
+                                            />
                                         </TableCell>
                                         <TableCell className="font-medium">
                                             {truncateText(post.title, 60)}
@@ -452,24 +477,22 @@ export default function PostsList() {
                                                     <Eye className="w-4 h-4" />
                                                 </Button>
                                                 {post.status === 'draft' && (
-                                                    <>
-                                                        <Button
-                                                            size="sm"
-                                                            onClick={() => handlePublishSingle(post.id)}
-                                                            disabled={publishingPosts.includes(post.id)}
-                                                        >
-                                                            <Upload className="w-4 h-4" />
-                                                        </Button>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="destructive"
-                                                            onClick={() => handleDeleteSingle(post.id)}
-                                                            disabled={deletingPosts.includes(post.id)}
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </Button>
-                                                    </>
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={() => handlePublishSingle(post.id)}
+                                                        disabled={publishingPosts.includes(post.id)}
+                                                    >
+                                                        <Upload className="w-4 h-4" />
+                                                    </Button>
                                                 )}
+                                                <Button
+                                                    size="sm"
+                                                    variant="destructive"
+                                                    onClick={() => handleDeleteSingle(post.id)}
+                                                    disabled={deletingPosts.includes(post.id)}
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -481,4 +504,4 @@ export default function PostsList() {
             </Card>
         </div>
     )
-} 
+}
