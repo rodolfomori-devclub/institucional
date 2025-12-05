@@ -25,7 +25,11 @@ interface Post {
     slug?: string
 }
 
-export default function PostsList() {
+interface PostsListProps {
+    category?: string
+}
+
+export default function PostsList({ category }: PostsListProps) {
     const router = useRouter()
 
     const [posts, setPosts] = useState<Post[]>([])
@@ -40,7 +44,8 @@ export default function PostsList() {
     const fetchPosts = async () => {
         setLoading(true)
         try {
-            const response = await fetch(`/api/posts?status=${activeTab}`)
+            const categoryParam = category ? `&category=${category}` : ''
+            const response = await fetch(`/api/posts?status=${activeTab}${categoryParam}`)
             const data = await response.json()
 
             if (data.success) {
@@ -327,9 +332,11 @@ export default function PostsList() {
         <div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">Gerenciar Posts</h1>
+                    <h1 className="text-3xl font-bold">
+                        {category === 'newsletter' ? 'Gerenciar Newsletter' : 'Gerenciar Posts'}
+                    </h1>
                     <p className="text-muted-foreground">
-                        Gerencie todos os seus posts
+                        {category === 'newsletter' ? 'Gerencie suas newsletters' : 'Gerencie todos os seus posts'}
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -354,8 +361,8 @@ export default function PostsList() {
             <div className="flex space-x-2 border-b">
                 <button
                     className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === 'draft'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-muted-foreground hover:text-foreground'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-muted-foreground hover:text-foreground'
                         }`}
                     onClick={() => setActiveTab('draft')}
                 >
@@ -363,8 +370,8 @@ export default function PostsList() {
                 </button>
                 <button
                     className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === 'published'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-muted-foreground hover:text-foreground'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-muted-foreground hover:text-foreground'
                         }`}
                     onClick={() => setActiveTab('published')}
                 >
@@ -434,7 +441,8 @@ export default function PostsList() {
                                 disabled={publishingPosts.length > 0}
                             >
                                 <Upload className="w-4 h-4 mr-2" />
-                                Publicar Todos os Rascunhos
+                                <span className="hidden sm:inline">Publicar Todos</span>
+                                <span className="sm:hidden">Publicar</span>
                             </Button>
                         </div>
                     </CardContent>

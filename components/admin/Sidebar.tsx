@@ -24,6 +24,12 @@ export default function Sidebar() {
             icon: FileText,
         },
         {
+            id: 'newsletter',
+            label: 'Newsletter',
+            href: '/admin/newsletter/',
+            icon: FileText,
+        },
+        {
             id: 'cta',
             label: 'CTA',
             href: '/admin/cta/',
@@ -116,4 +122,4 @@ export default function Sidebar() {
             )}
         </>
     )
-} 
+}

@@ -39,11 +39,12 @@ export interface Post {
   publishedAt: string
   author?: string
   featured?: boolean
+  category?: string
 }
 
-// Query para posts com paginação
+// Query para posts com paginação (Blog)
 export const postsQuery = `
-  *[_type == "post"] | order(publishedAt desc) [$start...$end] {
+  *[_type == "post" && (category == "blog" || !defined(category))] | order(publishedAt desc) [$start...$end] {
     _id,
     title,
     slug,
@@ -53,13 +54,14 @@ export const postsQuery = `
     generatedImageUrl,
     publishedAt,
     author,
-    featured
+    featured,
+    category
   }
 `
 
-// Query para posts em destaque
+// Query para posts em destaque (Blog)
 export const featuredPostsQuery = `
-  *[_type == "post" && featured == true] | order(publishedAt desc) [0...5] {
+  *[_type == "post" && featured == true && (category == "blog" || !defined(category))] | order(publishedAt desc) [0...5] {
     _id,
     title,
     slug,
@@ -69,13 +71,14 @@ export const featuredPostsQuery = `
     generatedImageUrl,
     publishedAt,
     author,
-    featured
+    featured,
+    category
   }
 `
 
-// Query para o post principal em destaque
+// Query para o post principal em destaque (Blog)
 export const mainFeaturedPostQuery = `
-  *[_type == "post" && featured == true] | order(publishedAt desc) [0] {
+  *[_type == "post" && featured == true && (category == "blog" || !defined(category))] | order(publishedAt desc) [0] {
     _id,
     title,
     slug,
@@ -85,13 +88,14 @@ export const mainFeaturedPostQuery = `
     generatedImageUrl,
     publishedAt,
     author,
-    featured
+    featured,
+    category
   }
 `
 
-// Query para pesquisar posts
+// Query para pesquisar posts (Blog)
 export const searchPostsQuery = `
-  *[_type == "post" && (title match $searchTerm || description match $searchTerm)] | order(publishedAt desc) [0...20] {
+  *[_type == "post" && (category == "blog" || !defined(category)) && (title match $searchTerm || description match $searchTerm)] | order(publishedAt desc) [0...20] {
     _id,
     title,
     slug,
@@ -101,7 +105,8 @@ export const searchPostsQuery = `
     generatedImageUrl,
     publishedAt,
     author,
-    featured
+    featured,
+    category
   }
 `
 
@@ -117,7 +122,8 @@ export const postQuery = `
     generatedImageUrl,
     publishedAt,
     author,
-    featured
+    featured,
+    category
   }
 `
 
@@ -133,12 +139,78 @@ export const postBySlugQuery = `
     body,
     publishedAt,
     author,
-    featured
+    featured,
+    category
   }
 `
 
 export const postPathsQuery = `
   *[_type == "post"] {
     "slug": slug.current
+  }
+`
+
+// Queries para Newsletter
+export const newsletterPostsQuery = `
+  *[_type == "post" && category == "newsletter"] | order(publishedAt desc) [$start...$end] {
+    _id,
+    title,
+    slug,
+    description,
+    mainImage,
+    thumbnail,
+    generatedImageUrl,
+    publishedAt,
+    author,
+    featured,
+    category
+  }
+`
+
+export const featuredNewsletterPostsQuery = `
+  *[_type == "post" && category == "newsletter" && featured == true] | order(publishedAt desc) [0...5] {
+    _id,
+    title,
+    slug,
+    description,
+    mainImage,
+    thumbnail,
+    generatedImageUrl,
+    publishedAt,
+    author,
+    featured,
+    category
+  }
+`
+
+export const mainFeaturedNewsletterPostQuery = `
+  *[_type == "post" && category == "newsletter" && featured == true] | order(publishedAt desc) [0] {
+    _id,
+    title,
+    slug,
+    description,
+    mainImage,
+    thumbnail,
+    generatedImageUrl,
+    publishedAt,
+    author,
+    featured,
+    category
+  }
+`
+
+export const searchNewsletterPostsQuery = `
+  *[_type == "post" && category == "newsletter" && (title match $searchTerm || description match $searchTerm)] | order(publishedAt desc) [0...20] {
+    _id,
+    title,
+    slug,
+    description,
+    mainImage,
+    thumbnail,
+    generatedImageUrl,
+    publishedAt,
+    author,
+    featured,
+    category
   }
 `

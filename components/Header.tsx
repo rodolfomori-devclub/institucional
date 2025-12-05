@@ -24,6 +24,7 @@ export default function Header() {
     { name: 'Formações', href: '/formacoes' },
     // { name: 'Comunidade', href: '/comunidade' },
     { name: 'Blog', href: '/blog' },
+    { name: 'Newsletter', href: '/newsletter' },
   ]
 
   const externalLinks = [

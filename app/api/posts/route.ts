@@ -15,14 +15,24 @@ export async function GET(request: NextRequest) {
     try {
         const url = new URL(request.url)
         const status = url.searchParams.get('status') || 'draft'
+        const category = url.searchParams.get('category')
 
         const postsCollection = collection(db, 'posts')
-        const q = query(postsCollection, where('status', '==', status))
+        let q = query(postsCollection, where('status', '==', status))
+
+        if (category) {
+            q = query(q, where('category', '==', category))
+        }
+
         const querySnapshot = await getDocs(q)
 
         const posts: any[] = []
         querySnapshot.forEach((doc) => {
             const data = doc.data()
+
+            // Client-side filtering as a fallback or for complex logic if needed
+            if (category && data.category && data.category !== category) return;
+
             posts.push({
                 id: doc.id,
                 ...data,
@@ -84,6 +94,7 @@ export async function POST(request: NextRequest) {
                         publishedAt: new Date().toISOString(),
                         author: postData.author || 'DevClub IA',
                         featured: false,
+                        category: postData.category || 'blog',
                     }
 
                     const sanityResult = await writeClient.create(sanityDoc)

@@ -65,6 +65,33 @@ export default {
       initialValue: false
     },
     {
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Rascunho', value: 'draft' },
+          { title: 'Aguardando Revisão', value: 'pending_review' },
+          { title: 'Publicado', value: 'published' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'draft'
+    },
+    {
+      name: 'category',
+      title: 'Categoria',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Blog', value: 'blog' },
+          { title: 'Newsletter', value: 'newsletter' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'blog'
+    },
+    {
       name: 'body',
       title: 'Conteúdo',
       type: 'array',
@@ -178,7 +205,7 @@ export default {
       media: 'mainImage'
     },
     prepare(selection: any) {
-      const {author} = selection
+      const { author } = selection
       return Object.assign({}, selection, {
         subtitle: author && `por ${author}`
       })
