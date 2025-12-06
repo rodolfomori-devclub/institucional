@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
         const url = new URL(request.url)
         const status = url.searchParams.get('status') || 'draft'
         const category = url.searchParams.get('category')
+        const excludeCategory = url.searchParams.get('excludeCategory')
 
         const postsCollection = collection(db, 'posts')
         let q = query(postsCollection, where('status', '==', status))
@@ -24,14 +25,19 @@ export async function GET(request: NextRequest) {
             q = query(q, where('category', '==', category))
         }
 
+        if (excludeCategory) {
+            q = query(q, where('category', '!=', excludeCategory))
+        }
+
         const querySnapshot = await getDocs(q)
 
         const posts: any[] = []
         querySnapshot.forEach((doc) => {
             const data = doc.data()
 
-            // Client-side filtering as a fallback or for complex logic if needed
+            // Client-side filtering
             if (category && data.category && data.category !== category) return;
+            if (excludeCategory && data.category === excludeCategory) return;
 
             posts.push({
                 id: doc.id,

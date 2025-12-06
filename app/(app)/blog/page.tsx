@@ -28,23 +28,23 @@ export default function BlogPage() {
   const fetchInitialData = async () => {
     try {
       setLoading(true)
-      
+
       // Buscar post principal em destaque
       const mainFeatured = await sanityClient.fetch(mainFeaturedPostQuery)
-      
+
       // Buscar posts em destaque para sidebar (excluindo o principal)
       const featured = await sanityClient.fetch(featuredPostsQuery)
       const sidebarFeatured = featured.filter((post: Post) => post._id !== mainFeatured?._id)
-      
+
       // Buscar posts recentes (excluindo os em destaque)
       const featuredIds = featured.map((post: Post) => post._id)
       const recentPosts = await sanityClient.fetch(
-        `*[_type == "post" && !(_id in $featuredIds)] | order(publishedAt desc) [0...${POSTS_PER_PAGE}] {
-          _id, title, slug, description, mainImage, thumbnail, generatedImageUrl, publishedAt, author, featured
+        `*[_type == "post" && category != "newsletter" && !(_id in $featuredIds)] | order(publishedAt desc) [0...${POSTS_PER_PAGE}] {
+          _id, title, slug, description, mainImage, thumbnail, generatedImageUrl, publishedAt, author, featured, category
         }`,
         { featuredIds }
       )
-      
+
       setMainFeaturedPost(mainFeatured)
       setFeaturedPosts(sidebarFeatured)
       setPosts(recentPosts)
@@ -69,11 +69,11 @@ export default function BlogPage() {
     try {
       setLoading(true)
       setSearchTerm(term)
-      
+
       const searchResults = await sanityClient.fetch(searchPostsQuery, {
         searchTerm: `*${term}*`
       })
-      
+
       setDisplayedPosts(searchResults)
       setHasMore(false) // Não há paginação na pesquisa
     } catch (error) {
@@ -88,19 +88,19 @@ export default function BlogPage() {
 
     try {
       setLoadingMore(true)
-      
+
       const start = page * POSTS_PER_PAGE
       const end = start + POSTS_PER_PAGE
-      
+
       const featuredIds = [mainFeaturedPost?._id, ...featuredPosts.map(p => p._id)].filter(Boolean)
-      
+
       const morePosts = await sanityClient.fetch(
-        `*[_type == "post" && !(_id in $featuredIds)] | order(publishedAt desc) [${start}...${end}] {
-          _id, title, slug, description, mainImage, thumbnail, generatedImageUrl, publishedAt, author, featured
+        `*[_type == "post" && category != "newsletter" && !(_id in $featuredIds)] | order(publishedAt desc) [${start}...${end}] {
+          _id, title, slug, description, mainImage, thumbnail, generatedImageUrl, publishedAt, author, featured, category
         }`,
         { featuredIds }
       )
-      
+
       setDisplayedPosts(prev => [...prev, ...morePosts])
       setHasMore(morePosts.length === POSTS_PER_PAGE)
       setPage(prev => prev + 1)
@@ -161,7 +161,7 @@ export default function BlogPage() {
                   </h2>
                   <div className="h-1 flex-1 ml-8 bg-gradient-to-r from-primary-600 to-transparent rounded-full"></div>
                 </div>
-                
+
                 {displayedPosts.length === 0 ? (
                   <div className="text-center py-20">
                     <div className="w-24 h-24 mx-auto mb-6 bg-gray-800 rounded-full flex items-center justify-center">

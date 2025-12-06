@@ -27,9 +27,10 @@ interface Post {
 
 interface PostsListProps {
     category?: string
+    excludeCategory?: string
 }
 
-export default function PostsList({ category }: PostsListProps) {
+export default function PostsList({ category, excludeCategory }: PostsListProps) {
     const router = useRouter()
 
     const [posts, setPosts] = useState<Post[]>([])
@@ -45,7 +46,8 @@ export default function PostsList({ category }: PostsListProps) {
         setLoading(true)
         try {
             const categoryParam = category ? `&category=${category}` : ''
-            const response = await fetch(`/api/posts?status=${activeTab}${categoryParam}`)
+            const excludeCategoryParam = excludeCategory ? `&excludeCategory=${excludeCategory}` : ''
+            const response = await fetch(`/api/posts?status=${activeTab}${categoryParam}${excludeCategoryParam}`)
             const data = await response.json()
 
             if (data.success) {
