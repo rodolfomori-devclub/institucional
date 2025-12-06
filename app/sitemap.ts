@@ -52,11 +52,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   let blogPages: MetadataRoute.Sitemap = []
-  
+
   try {
     const posts = await sanityClient.fetch(postPathsQuery)
-    blogPages = posts.map((post: { slug: string }) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
+    blogPages = posts.map((post: { slug: string, category?: string }) => ({
+      url: `${baseUrl}/${post.category === 'newsletter' ? 'newsletter' : 'blog'}/${post.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,

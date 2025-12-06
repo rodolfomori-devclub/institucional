@@ -44,7 +44,7 @@ export interface Post {
 
 // Query para posts com paginação (Blog)
 export const postsQuery = `
-  *[_type == "post" && (category == "blog" || !defined(category))] | order(publishedAt desc) [$start...$end] {
+  *[_type == "post" && (category == "blog" || !defined(category) || category != "newsletter")] | order(publishedAt desc) [$start...$end] {
     _id,
     title,
     slug,
@@ -61,7 +61,7 @@ export const postsQuery = `
 
 // Query para posts em destaque (Blog)
 export const featuredPostsQuery = `
-  *[_type == "post" && featured == true && (category == "blog" || !defined(category))] | order(publishedAt desc) [0...5] {
+  *[_type == "post" && featured == true && (category == "blog" || !defined(category) || category != "newsletter")] | order(publishedAt desc) [0...5] {
     _id,
     title,
     slug,
@@ -78,7 +78,7 @@ export const featuredPostsQuery = `
 
 // Query para o post principal em destaque (Blog)
 export const mainFeaturedPostQuery = `
-  *[_type == "post" && featured == true && (category == "blog" || !defined(category))] | order(publishedAt desc) [0] {
+  *[_type == "post" && featured == true && (category == "blog" || !defined(category) || category != "newsletter")] | order(publishedAt desc) [0] {
     _id,
     title,
     slug,
@@ -95,7 +95,7 @@ export const mainFeaturedPostQuery = `
 
 // Query para pesquisar posts (Blog)
 export const searchPostsQuery = `
-  *[_type == "post" && (category == "blog" || !defined(category)) && (title match $searchTerm || description match $searchTerm)] | order(publishedAt desc) [0...20] {
+  *[_type == "post" && (category == "blog" || !defined(category) || category != "newsletter") && (title match $searchTerm || description match $searchTerm)] | order(publishedAt desc) [0...20] {
     _id,
     title,
     slug,
@@ -146,7 +146,8 @@ export const postBySlugQuery = `
 
 export const postPathsQuery = `
   *[_type == "post"] {
-    "slug": slug.current
+    "slug": slug.current,
+    category
   }
 `
 

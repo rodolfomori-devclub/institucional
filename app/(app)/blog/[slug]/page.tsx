@@ -99,7 +99,7 @@ export default async function PostPage({ params }: Props) {
   const ctaResponse = await getCTA()
   const cta = ctaResponse?.cta || null
 
-  if (!post) {
+  if (!post || post.category === 'newsletter') {
     notFound()
   }
 
