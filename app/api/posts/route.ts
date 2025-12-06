@@ -22,11 +22,11 @@ export async function GET(request: NextRequest) {
         let q = query(postsCollection, where('status', '==', status))
 
         if (category) {
-            q = query(q, where('category', '==', category))
+            // q = query(q, where('category', '==', category)) // Commented out to avoid index error
         }
 
         if (excludeCategory) {
-            q = query(q, where('category', '!=', excludeCategory))
+            // q = query(q, where('category', '!=', excludeCategory)) // Commented out to avoid index error
         }
 
         const querySnapshot = await getDocs(q)
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
             const data = doc.data()
 
             // Client-side filtering
-            if (category && data.category && data.category !== category) return;
+            if (category && data.category !== category) return;
             if (excludeCategory && data.category === excludeCategory) return;
 
             posts.push({
