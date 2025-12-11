@@ -110,8 +110,33 @@ export async function POST(request: NextRequest) {
                     await updateDoc(postRef, {
                         status: 'published',
                         publishedAt: serverTimestamp(),
-                        sanityId: sanityResult._id
                     })
+
+                    // Enviar webhook de validação (APENAS para newsletter)
+                    if (postData.category === 'newsletter') {
+                        try {
+                            await fetch('https://n8n-webhook.sako8u.easypanel.host/webhook/validation', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    event: 'post_approved',
+                                    postId: postId,
+                                    sanityId: sanityResult._id,
+                                    title: postData.title,
+                                    slug: postData.slug,
+                                    category: postData.category,
+                                    publishedAt: new Date().toISOString(),
+                                    author: postData.author,
+                                    description: postData.description,
+                                    content: postData.content
+                                })
+                            })
+                        } catch (webhookError) {
+                            console.error('Erro ao enviar webhook:', webhookError)
+                        }
+                    }
 
                     results.push({
                         id: postId,
