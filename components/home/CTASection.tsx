@@ -62,7 +62,7 @@ export default function CTASection() {
               </span>
             </Link>
             <a
-              href="https://rodolfomori.typeform.com/to/rQb1MBt5"
+              href="https://go.rodolfomori.com.br/comercial"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-primary border-2 border-primary rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 neon-border cursor-pointer"

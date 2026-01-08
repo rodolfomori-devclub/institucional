@@ -22,7 +22,7 @@ export default function Header() {
     { name: 'Home', href: '/' },
     { name: 'Sobre', href: '/sobre' },
     { name: 'Formações', href: '/formacoes' },
-    // { name: 'Comunidade', href: '/comunidade' },
+    { name: 'MBA', href: '/mba' },
     { name: 'Blog', href: '/blog' },
     { name: 'Newsletter', href: '/newsletter' },
   ]
@@ -89,15 +89,17 @@ export default function Header() {
             >
               Login
             </a>
-            <Link
-              href="/#matricule-se"
+            <a
+              href="https://go.rodolfomori.com.br/comercial"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-glow shine"
               style={{
                 animation: 'slideDown 0.5s ease-out 0.8s both'
               }}
             >
               Matricule-se
-            </Link>
+            </a>
           </div>
 
           <div className="md:hidden">
@@ -177,13 +179,15 @@ export default function Header() {
             >
               Login
             </a>
-            <Link
-              href="/#matricule-se"
+            <a
+              href="https://go.rodolfomori.com.br/comercial"
+              target="_blank"
+              rel="noopener noreferrer"
               className="block w-full mt-4 btn-glow text-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Matricule-se
-            </Link>
+            </a>
           </div>
         </div>
       </nav>

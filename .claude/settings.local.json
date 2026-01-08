@@ -14,7 +14,8 @@
       "Bash(node:*)",
       "Bash(grep:*)",
       "Bash(kill:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(cat:*)"
     ],
     "deny": []
   }

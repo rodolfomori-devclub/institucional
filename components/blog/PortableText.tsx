@@ -198,5 +198,31 @@ const components = {
 }
 
 export default function PortableText({ value }: { value: any[] }) {
+  // Se value é uma string (markdown bruto), renderiza com MarkdownRenderer
+  if (typeof value === 'string') {
+    return <MarkdownRenderer content={value} />
+  }
+
+  // Se value é um array mas o primeiro elemento tem markdown bruto como texto
+  if (Array.isArray(value) && value.length > 0) {
+    const firstBlock = value[0]
+
+    // Verifica se é um bloco com texto que parece markdown (começa com # ou contém [link](url))
+    if (firstBlock._type === 'block' && firstBlock.children?.[0]?.text) {
+      const text = firstBlock.children[0].text
+      if (text.startsWith('#') || text.includes('](http') || text.includes('**')) {
+        // Extrai todo o texto dos blocos e renderiza como markdown
+        const fullText = value
+          .filter((block: any) => block._type === 'block')
+          .map((block: any) =>
+            block.children?.map((child: any) => child.text || '').join('') || ''
+          )
+          .join('\n\n')
+
+        return <MarkdownRenderer content={fullText} />
+      }
+    }
+  }
+
   return <PortableTextComponent value={value} components={components} />
 }
