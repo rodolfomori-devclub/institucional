@@ -1,7 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+
+// Função para gerar URL do avatar baseado no nome
+const getAvatarUrl = (name: string) => {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00ff88&color=0a0a0a&size=128&bold=true`
+}
 
 export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -12,8 +16,7 @@ export default function TestimonialsSection() {
     {
       name: 'Henrique Francisco de Souza',
       role: 'Vendedor De Peças',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/henrique.jpg',
+      image: '/images/testimonials/henrique.jpg',
       content: 'De vendedor de motos a gestor de tráfego da maneira loja. Sou da Palmeira D\'Oeste e decidi entrar no curso porque queria ter uma profissão que me torne independente. Foi essencial participar do DevClub, não somente por aprender a programação de fato, mas também pelo networking.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em agosto de 2022',
@@ -21,8 +24,7 @@ export default function TestimonialsSection() {
     {
       name: 'Pedro Santos',
       role: 'Ajudante De Pedreiro',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/pedro.jpg',
+      image: '/images/testimonials/pedro.jpg',
       content: 'Eu trabalhava como ajudante de pedreiro e queria fazer algo diferente. A programação me ajudou a conquistar tudo, depois de 6 meses estudando o máximo que eu podia. DevClub foi divisor de águas em minha vida.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em julho de 2021',
@@ -30,17 +32,15 @@ export default function TestimonialsSection() {
     {
       name: 'Mattheus Martins Nascimento',
       role: 'Uber E Vendedor De Seguros',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/mattheus.jpg',
+      image: '/images/testimonials/mattheus.jpg',
       content: 'Foram três etapas: as duas primeiras para preenchimento de formulário e estudo de videos em inglês. A última foi uma entrevista de duas horas. Mentoria com Bia, Mentoria do Rodolfo, Dúvidas da comunidade. É a parte técnica do curso.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em março de 2023',
     },
     {
       name: 'Ailton Peron Junior',
-      role: 'Tepi',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/ailton.jpg',
+      role: 'Engenheiro de Produção',
+      image: '/images/testimonials/ailton.jpg',
       content: 'Eu me formei como engenheiro de produção primeiramente e não estava me encontrando. Aí um dia surgir vídeos de como criar um site e eu me encontrei e vim tentando possibilidades, conseguindo chegar onde estou. Desde o começo me apaixonei, logo criei uma estratégia.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em setembro de 2023',
@@ -48,17 +48,15 @@ export default function TestimonialsSection() {
     {
       name: 'Mayara Gerda Guedes',
       role: 'Primeiro Emprego',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/mayara.jpg',
+      image: '/images/testimonials/mayara.jpg',
       content: 'Muita dedicação e paciência. Foi o início de uma mudança de vida, profunda e significativa! Graças ao DevClub ajudou muito com a mentalidade, desde o dia conversando de como eu consegui o CodeBoost.',
       rating: 5,
-      employment: 'Primeiro Emprego como Programador em outubro de 2022',
+      employment: 'Primeiro Emprego como Programadora em outubro de 2022',
     },
     {
       name: 'Mariane Aparecida Yano',
       role: 'Atendente De Telemarketing',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/mariane.jpg',
+      image: '/images/testimonials/mariane.jpg',
       content: 'Durante meu tempo livre estudei programação e entrei no curso do Rodolfo. Ao cumprir o desafio nasceu a proposta de uma oportunidade e agarrei com as duas mãos. Graças ao DevClub pude mudar minha mentalidade.',
       rating: 5,
       employment: 'Primeiro Emprego como Programadora em junho de 2024',
@@ -66,8 +64,7 @@ export default function TestimonialsSection() {
     {
       name: 'Matheus Silva',
       role: 'Suporte Web',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/matheus-silva.jpg',
+      image: '/images/testimonials/matheus-silva.jpg',
       content: 'Comecei minha jornada na área de tecnologia em 2015, quando iniciei minha faculdade. Meu primeiro emprego foi como Jovem aprendiz, e na sequência, trocava de emprego rapidamente. Depois de um tempo percebi que precisava voltar a estudar.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em maio de 2023',
@@ -75,8 +72,7 @@ export default function TestimonialsSection() {
     {
       name: 'Rafael Melendres',
       role: 'Fotógrafo',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/rafael.jpg',
+      image: '/images/testimonials/rafael.jpg',
       content: 'Entrei no dev club para entender um pouco de dev, pois eu não sabia usar o node e não entendia muito bem linhas de código, na primeira aula da IA deixa muita coisa se encaixar, pois ai que percebi que precisa começar direito.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em junho de 2025',
@@ -84,8 +80,7 @@ export default function TestimonialsSection() {
     {
       name: 'Daniel Euclides Corrêa',
       role: 'Auxiliar Administrativo',
-      company: '',
-      image: 'https://stars.devclub.com.br/images/daniel.jpg',
+      image: '/images/testimonials/daniel.jpg',
       content: 'Estudo, foco, dedicação e network. Na 5a entrevista, a vaga foi minha sem indicação. Me esforcei foi o mais eficiente. DevClub me deu a base de programação.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em 2023',
@@ -165,11 +160,14 @@ export default function TestimonialsSection() {
 
                     <div className="flex items-center relative z-10">
                       <div className="relative w-16 h-16 rounded-full overflow-hidden mr-4 ring-2 ring-primary">
-                        <Image
+                        <img
                           src={testimonial.image}
                           alt={testimonial.name}
-                          fill
-                          className="object-cover"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = getAvatarUrl(testimonial.name)
+                          }}
                         />
                       </div>
                       <div>
