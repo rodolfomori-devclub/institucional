@@ -33,32 +33,22 @@ export default function SobrePage() {
 
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-text-dark mb-6">
-                A ESCOLA ONLINE QUE MAIS COLOCA PROGRAMADORES NO MERCADO DE TECNOLOGIA NO BRASIL
-              </h2>
-              <p className="text-text-muted-dark mb-4">
-                O DevClub é a maior escola online de formação em programação, reconhecida por ser a que mais coloca programadores no mercado de tecnologia no Brasil.
-              </p>
-              <p className="text-text-muted-dark mb-4">
-                Fundada por Rodolfo Mori, o DevClub nasceu com a missão de democratizar o acesso à carreira de tecnologia, oferecendo uma formação prática, direta ao ponto e conectada com o que o mercado realmente exige.
-              </p>
-              <p className="text-text-muted-dark mb-4">
-                Mais do que ensinar a programar, o DevClub prepara seus alunos para serem contratados, com trilhas completas de estudo, acompanhamento próximo, suporte humano e estratégias de posicionamento profissional que vão muito além do código.
-              </p>
-              <p className="text-text-muted-dark">
-                Com mais de 12 mil alunos ativos e centenas de histórias reais de transformação, o DevClub é hoje referência em empregabilidade e desenvolvimento tech no país.
-              </p>
-            </div>
-            <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
-              <Image
-                src="/about-history.jpg"
-                alt="História do DevClub"
-                fill
-                className="object-cover"
-              />
-            </div>
+          <div className="max-w-4xl mx-auto mb-20">
+            <h2 className="text-3xl sm:text-4xl font-bold text-text-dark mb-6 text-center">
+              A ESCOLA ONLINE QUE MAIS COLOCA PROGRAMADORES NO MERCADO DE TECNOLOGIA NO BRASIL
+            </h2>
+            <p className="text-text-muted-dark mb-4">
+              O DevClub é a maior escola online de formação em programação, reconhecida por ser a que mais coloca programadores no mercado de tecnologia no Brasil.
+            </p>
+            <p className="text-text-muted-dark mb-4">
+              Fundada por Rodolfo Mori, o DevClub nasceu com a missão de democratizar o acesso à carreira de tecnologia, oferecendo uma formação prática, direta ao ponto e conectada com o que o mercado realmente exige.
+            </p>
+            <p className="text-text-muted-dark mb-4">
+              Mais do que ensinar a programar, o DevClub prepara seus alunos para serem contratados, com trilhas completas de estudo, acompanhamento próximo, suporte humano e estratégias de posicionamento profissional que vão muito além do código.
+            </p>
+            <p className="text-text-muted-dark">
+              Com mais de 12 mil alunos ativos e centenas de histórias reais de transformação, o DevClub é hoje referência em empregabilidade e desenvolvimento tech no país.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
