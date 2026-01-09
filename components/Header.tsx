@@ -52,7 +52,7 @@ export default function Header() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6">
             {navigation.map((item, index) => (
               <Link
                 key={item.name}
@@ -102,7 +102,7 @@ export default function Header() {
             </a>
           </div>
 
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               type="button"
               className="text-text-dark hover:text-primary p-2 transition-colors duration-200"
@@ -138,7 +138,7 @@ export default function Header() {
         </div>
 
         {/* Mobile menu */}
-        <div className={`md:hidden transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        <div className={`lg:hidden transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
           }`}>
           <div className="glass rounded-lg mt-2 p-4 space-y-1">
             {navigation.map((item, index) => (
