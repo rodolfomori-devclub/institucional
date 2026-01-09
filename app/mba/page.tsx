@@ -1,5 +1,12 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useEffect } from 'react'
 
 export default function MBAPage() {
-  redirect('http://lp.devclub.com.br/mba')
+  useEffect(() => {
+    window.open('http://lp.devclub.com.br/mba', '_blank')
+    window.history.back()
+  }, [])
+
+  return null
 }

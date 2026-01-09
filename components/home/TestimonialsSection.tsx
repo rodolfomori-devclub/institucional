@@ -16,7 +16,7 @@ export default function TestimonialsSection() {
     {
       name: 'Henrique Francisco de Souza',
       role: 'Vendedor De Peças',
-      image: '/images/testimonials/henrique.jpg',
+      image: '/images/henrique.png',
       content: 'De vendedor de motos a gestor de tráfego da maneira loja. Sou da Palmeira D\'Oeste e decidi entrar no curso porque queria ter uma profissão que me torne independente. Foi essencial participar do DevClub, não somente por aprender a programação de fato, mas também pelo networking.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em agosto de 2022',
@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
     {
       name: 'Pedro Santos',
       role: 'Ajudante De Pedreiro',
-      image: '/images/testimonials/pedro.jpg',
+      image: '/images/pedrosantos.png',
       content: 'Eu trabalhava como ajudante de pedreiro e queria fazer algo diferente. A programação me ajudou a conquistar tudo, depois de 6 meses estudando o máximo que eu podia. DevClub foi divisor de águas em minha vida.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em julho de 2021',
@@ -32,7 +32,7 @@ export default function TestimonialsSection() {
     {
       name: 'Mattheus Martins Nascimento',
       role: 'Uber E Vendedor De Seguros',
-      image: '/images/testimonials/mattheus.jpg',
+      image: '/images/Mattheus.png',
       content: 'Foram três etapas: as duas primeiras para preenchimento de formulário e estudo de videos em inglês. A última foi uma entrevista de duas horas. Mentoria com Bia, Mentoria do Rodolfo, Dúvidas da comunidade. É a parte técnica do curso.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em março de 2023',
@@ -40,7 +40,7 @@ export default function TestimonialsSection() {
     {
       name: 'Ailton Peron Junior',
       role: 'Engenheiro de Produção',
-      image: '/images/testimonials/ailton.jpg',
+      image: '/images/ailton.png',
       content: 'Eu me formei como engenheiro de produção primeiramente e não estava me encontrando. Aí um dia surgir vídeos de como criar um site e eu me encontrei e vim tentando possibilidades, conseguindo chegar onde estou. Desde o começo me apaixonei, logo criei uma estratégia.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em setembro de 2023',
@@ -48,7 +48,7 @@ export default function TestimonialsSection() {
     {
       name: 'Mayara Gerda Guedes',
       role: 'Primeiro Emprego',
-      image: '/images/testimonials/mayara.jpg',
+      image: '/images/Mayara.png',
       content: 'Muita dedicação e paciência. Foi o início de uma mudança de vida, profunda e significativa! Graças ao DevClub ajudou muito com a mentalidade, desde o dia conversando de como eu consegui o CodeBoost.',
       rating: 5,
       employment: 'Primeiro Emprego como Programadora em outubro de 2022',
@@ -56,7 +56,7 @@ export default function TestimonialsSection() {
     {
       name: 'Mariane Aparecida Yano',
       role: 'Atendente De Telemarketing',
-      image: '/images/testimonials/mariane.jpg',
+      image: '/images/mariane.png',
       content: 'Durante meu tempo livre estudei programação e entrei no curso do Rodolfo. Ao cumprir o desafio nasceu a proposta de uma oportunidade e agarrei com as duas mãos. Graças ao DevClub pude mudar minha mentalidade.',
       rating: 5,
       employment: 'Primeiro Emprego como Programadora em junho de 2024',
@@ -64,7 +64,7 @@ export default function TestimonialsSection() {
     {
       name: 'Matheus Silva',
       role: 'Suporte Web',
-      image: '/images/testimonials/matheus-silva.jpg',
+      image: '/images/Matheussilva.png',
       content: 'Comecei minha jornada na área de tecnologia em 2015, quando iniciei minha faculdade. Meu primeiro emprego foi como Jovem aprendiz, e na sequência, trocava de emprego rapidamente. Depois de um tempo percebi que precisava voltar a estudar.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em maio de 2023',
@@ -72,7 +72,7 @@ export default function TestimonialsSection() {
     {
       name: 'Rafael Melendres',
       role: 'Fotógrafo',
-      image: '/images/testimonials/rafael.jpg',
+      image: '/images/rafaelmelendres.png',
       content: 'Entrei no dev club para entender um pouco de dev, pois eu não sabia usar o node e não entendia muito bem linhas de código, na primeira aula da IA deixa muita coisa se encaixar, pois ai que percebi que precisa começar direito.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em junho de 2025',
@@ -80,7 +80,7 @@ export default function TestimonialsSection() {
     {
       name: 'Daniel Euclides Corrêa',
       role: 'Auxiliar Administrativo',
-      image: '/images/testimonials/daniel.jpg',
+      image: '/images/daniel.png',
       content: 'Estudo, foco, dedicação e network. Na 5a entrevista, a vaga foi minha sem indicação. Me esforcei foi o mais eficiente. DevClub me deu a base de programação.',
       rating: 5,
       employment: 'Primeiro Emprego como Programador em 2023',
